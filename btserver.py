@@ -117,6 +117,17 @@ def server():
 							
 					except:
 						pass
+						
+			if data == "binClock":
+				try:
+					if p.poll() == None:
+						print "Can only start one process at a time"
+				except:	
+					try:
+						#starte den subprocess und speichere ihn unter p
+						p = subprocess.Popen(["python", "/home/pi/led/progs10/binaryClock.py"])
+					except:
+						pass	
 			
 			if data == "black":
 				try:
