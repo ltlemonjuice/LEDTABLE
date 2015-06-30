@@ -110,7 +110,7 @@ Builder.load_string('''
 		GridLayout:
 			cols: 1	
 			size_hint_y: None
-			height: 80
+			height: 160
 			Button:
 				background_color: [2,0,0,1]
 				text: 'Quit and Back to Menu'
@@ -130,7 +130,7 @@ Builder.load_string('''
 		GridLayout:
 			rows: 1
 			size_hint_y: None
-			height: 80
+			height: 160
 
 			Button:
 				text: "Set Color"
@@ -178,7 +178,7 @@ Builder.load_string('''
 		GridLayout:
 			cols: 1	
 			size_hint_y: None
-			height: 80
+			height: 160
 			Button:
 				background_color: [2,0,0,1]
 				text: 'Quit and Back to Menu'
@@ -277,4 +277,5 @@ class GUI(App):
 		return sm
 
 if __name__ == '__main__':
+	GUI().run()
 	GUI().run()
