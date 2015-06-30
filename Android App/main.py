@@ -278,4 +278,3 @@ class GUI(App):
 
 if __name__ == '__main__':
 	GUI().run()
-	GUI().run()
