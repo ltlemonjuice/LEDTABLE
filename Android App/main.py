@@ -29,6 +29,7 @@ Builder.load_string('''
 			text: "Binary Clock"
 			on_release:
 				root.send("stop")
+				root.setTime()
 				root.send("binClock")
 		Button:
 			text: 'HSV'
@@ -204,6 +205,7 @@ class FirstScreen(Screen):
 		pairedDevices = adapter.getDefaultAdapter().getBondedDevices().toArray()
 		#sendStream wird global gesetzt damit man sie von anderen klassen aufrufen kann
 		global sendStream
+		global socket
 		#connecting
 		#checkt ob checkState bereits True ist
 		if self.checkState == False:
@@ -218,12 +220,27 @@ class FirstScreen(Screen):
 						socket.connect()
 						self.checkState = True
 						system.out.println("connected")
+
 					except:
 						system.out.println("unsuccessful")
+						self.checkState = False
 					
 					break
 		else:
-			system.out.println("already connected!")
+			if socket.isConnected():
+				system.out.println("already connected!")
+			else:
+				self.checkState = False
+				connect()
+
+
+	def setTime(self):
+		timeSET = "TIME " + time.ctime()
+		try:
+			sendStream.write(timeSET)
+			sendStream.flush()
+		except:
+			system.out.println("not yet connected")
 		
 	def send(self, data):
 		try:

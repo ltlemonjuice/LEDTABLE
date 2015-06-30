@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 #coding: utf8 
+
 #imports
 from bluetooth import *
 import subprocess
 import time
+import os
 from imgdisp import imgdisp
 
 
@@ -53,6 +55,14 @@ def server():
 			print("received [%s]" % data)
 			
 			#Command receiving
+			if data[0:5] == "TIME ":
+				try:
+					print(data[5:30])
+					os.system("sudo date -s '%s'" % data[5:30])
+					#subprocess.Popen(["sudo", "date -s", data[6:29])
+				except:
+					pass
+
 				
 			if data == "hsv":
 				try:
