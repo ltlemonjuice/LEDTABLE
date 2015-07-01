@@ -246,6 +246,7 @@ class FirstScreen(Screen):
 		try:
 			sendStream.write(data)
 			sendStream.flush()
+			system.out.println("Sent: " + data)
 		except:
 			system.out.println("not yet connected")
 
@@ -255,6 +256,7 @@ class SecondScreen(Screen):
 		try:
 			sendStream.write(data)
 			sendStream.flush()
+			system.out.println("Sent: " + data)
 		except:
 			system.out.println("not yet connected")
 
@@ -264,6 +266,7 @@ class ThirdScreen(Screen):
 		try:
 			sendStream.write(data)
 			sendStream.flush()
+			system.out.println("Sent: " + data)
 		except:
 			system.out.println("not yet connected")
 			
@@ -272,6 +275,7 @@ class FourthScreen(Screen):
 		try:
 			sendStream.write(data)
 			sendStream.flush()
+			system.out.println("Sent: " + data)
 		except:
 			system.out.println("not yet connected")
 	
