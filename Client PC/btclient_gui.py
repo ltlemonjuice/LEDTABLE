@@ -22,7 +22,7 @@ Builder.load_string('''
 		cols: 1
 		Label:
 			size_hint_y: None
-			height: 80
+			height: 20
 			text: 'LED TABLE GUI'
 		Button:
 			background_color: [0,0,2,1]
@@ -98,7 +98,7 @@ Builder.load_string('''
 		cols: 1
 		Label:
 			size_hint_y: None
-			height: 80
+			height: 20
 			text: "Snake Controls"
 
 		Button:
@@ -125,7 +125,7 @@ Builder.load_string('''
 		GridLayout:
 			cols: 1	
 			size_hint_y: None
-			height: 160
+			height: 20
 			Button:
 				background_color: [2,0,0,1]
 				text: 'Quit and Back to Menu'
@@ -145,7 +145,7 @@ Builder.load_string('''
 		GridLayout:
 			rows: 1
 			size_hint_y: None
-			height: 160
+			height: 40
 
 			Button:
 				text: "Set Color"
@@ -166,7 +166,7 @@ Builder.load_string('''
 		cols: 1
 		Label:
 			size_hint_y: None
-			height: 80
+			height: 20
 			text: "Tetris Controls"
 
 		Button:
@@ -193,7 +193,7 @@ Builder.load_string('''
 		GridLayout:
 			cols: 1	
 			size_hint_y: None
-			height: 160
+			height: 40
 			Button:
 				background_color: [2,0,0,1]
 				text: 'Quit and Back to Menu'
@@ -204,57 +204,118 @@ Builder.load_string('''
 					root.manager.transition.direction = "right"
 
 <FifthScreen>:
-	GridLayout:
-		cols: 1
-		Label:
-			size_hint_y: None
-			height: 80
-			text: "Scrolling Text Controls"
-		
+	AnchorLayout:
 		GridLayout:
-			size_hint_y: None
-			height: 200
-			cols: 2
-			Slider:
-				id: SPSL
-				min: 0
-				max: 0.1
-				value: 0.025
-				step: 0.001
+			anchor_x: "center"
+			anchor_y: "top"	
+			cols: 1
+			Label:
+				size_hint_y: None
+				height: 20
+				text: "Scrolling Text Controls"
+			
+			TextInput:
+				id: ST
+				size_hint_y: None
+				height: 40
+				multiline: False
+				focus: False
+				text: ""
+		
 			Button:
-				text: "Set Speed to %s" % SPSL.value
+				size_hint_y: None
+				height: 40
+				text: "Display Text"
 				on_release:
-					root.send("*SPEED*%s" %SPSL.value)
+					root.send(ST.text)
 
-		TextInput:
-			id: ST
-			size_hint_y: None
-			height: 200
-			multiline: False
-			focus: False
-			text: ""
-	
-		Button:
-			size_hint_y: None
-			height: 200
-			text: "Display Text"
-			on_release:
-				root.send(ST.text)
+			GridLayout:
+				size_hint_y: None
+				height: 40
+				cols: 2
+				Slider:
+					id: SPSL
+					min: 0
+					max: 0.1
+					value: 0.025
+					step: 0.001
+				Button:
+					text: "Set Speed to %s" % SPSL.value
+					on_release:
+						root.send("*SPEED*%s" %SPSL.value)
+
+			
+			GridLayout:
+				rows: 2
+				size_hint_y: None
+				height: 200
+				
+				GridLayout:
+					cols: 3
+					size_hint_y: None
+					height: 20
+					Label:
+						text: "Red"
+					Label:
+						text: "Green"
+					Label:
+						text: "Blue"
+
+				GridLayout:
+					cols: 3	
+
+					Slider:
+						id: red
+						orientation: "vertical"
+						min: 0
+						max: 255
+						value: 255
+						step: 1
+					Slider:
+						id: green
+						orientation: "vertical"
+						min: 0
+						max: 255
+						value: 0
+						step: 1
+					Slider:
+						id: blue
+						orientation: "vertical"
+						min: 0
+						max: 255
+						value: 0
+						step: 1
+
+					
+
+
+			Button:
+				size_hint_y: None
+				height: 40
+				text: "Set Color"
+				on_release:
+					root.send("*COLOR*["+ str(int(red.value)) + "," + str(int(green.value)) + "," + str(int(blue.value))+ "]")
+
+
+			
 
 		
 
-		GridLayout:
-			cols: 1	
-			size_hint_y: None
-			height: 160
-			Button:
-				background_color: [2,0,0,1]
-				text: 'Quit and Back to Menu'
-				on_press: 
-					root.send("stop")
-					root.send("black")
-					root.manager.current = "1st"
-					root.manager.transition.direction = "down"
+		
+
+	
+	Button:
+		size_hint_y: None
+		height: 160
+		anchor_x: "center"
+		anchor_y: "bottom"	
+		background_color: [2,0,0,1]
+		text: 'Quit and Back to Menu'
+		on_press: 
+			root.send("stop")
+			root.send("black")
+			root.manager.current = "1st"
+			root.manager.transition.direction = "down"
 ''')
 
 
