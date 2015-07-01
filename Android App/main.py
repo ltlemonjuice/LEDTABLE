@@ -2,8 +2,11 @@ import kivy
 kivy.require('1.0.9')
 from kivy.lang import Builder
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.label import Label
 from kivy.uix.button import Button
+from kivy.uix.slider import Slider
+from kivy.graphics import Color, Rectangle
 from kivy.uix.screenmanager import ScreenManager, Screen
 import time
 from jnius import autoclass
@@ -31,6 +34,15 @@ Builder.load_string('''
 				root.send("stop")
 				root.setTime()
 				root.send("binClock")
+
+		Button:
+			text: "Scrolling Text"
+			on_release:
+				root.send("stop")
+				root.send("scrollText")
+				root.manager.current = "5th"
+				root.manager.transition.direction = "up"
+
 		Button:
 			text: 'HSV'
 			on_release:
@@ -188,6 +200,121 @@ Builder.load_string('''
 					root.send("black")
 					root.manager.current = "1st"
 					root.manager.transition.direction = "right"
+
+<FifthScreen>:
+	AnchorLayout:
+		GridLayout:
+			anchor_x: "center"
+			anchor_y: "top"	
+			cols: 1
+			Label:
+				size_hint_y: None
+				height: 80
+				text: "Scrolling Text Controls"
+			
+			TextInput:
+				id: ST
+				size_hint_y: None
+				height: 200
+				multiline: False
+				focus: False
+				text: ""
+		
+			Button:
+				size_hint_y: None
+				height: 200
+				text: "Display Text"
+				on_release:
+					root.send(ST.text)
+
+			GridLayout:
+				size_hint_y: None
+				height: 200
+				cols: 2
+				Slider:
+					id: SPSL
+					min: 0
+					max: 0.1
+					value: 0.025
+					step: 0.001
+				Button:
+					text: "Set Speed to %s" % SPSL.value
+					on_release:
+						root.send("*SPEED*%s" %SPSL.value)
+
+			
+			GridLayout:
+				rows: 2
+				size_hint_y: None
+				height: 700
+				
+				GridLayout:
+					cols: 3
+					size_hint_y: None
+					height: 100
+					Label:
+						text: "Red"
+					Label:
+						text: "Green"
+					Label:
+						text: "Blue"
+
+				GridLayout:
+					cols: 3	
+
+					Slider:
+						id: red
+						orientation: "vertical"
+						min: 0
+						max: 255
+						value: 255
+						step: 1
+					Slider:
+						id: green
+						orientation: "vertical"
+						min: 0
+						max: 255
+						value: 0
+						step: 1
+					Slider:
+						id: blue
+						orientation: "vertical"
+						min: 0
+						max: 255
+						value: 0
+						step: 1
+
+					
+
+
+			Button:
+				size_hint_y: None
+				height: 200
+				text: "Set Color"
+				on_release:
+					root.send("*COLOR*["+ str(int(red.value)) + "," + str(int(green.value)) + "," + str(int(blue.value))+ "]")
+
+
+			
+
+		
+
+		
+
+	
+	Button:
+		size_hint_y: None
+		height: 160
+		anchor_x: "center"
+		anchor_y: "bottom"	
+		background_color: [2,0,0,1]
+		text: 'Quit and Back to Menu'
+		on_press: 
+			root.send("stop")
+			root.send("black")
+			root.manager.current = "1st"
+			root.manager.transition.direction = "down"
+
 ''')
 
 
@@ -280,15 +407,24 @@ class FourthScreen(Screen):
 			system.out.println("not yet connected")
 	
 	
+class FifthScreen(Screen):
+	def send(self, data):
+		try:
+			sendStream.write(data)
+			sendStream.flush()
+			system.out.println("Sent: " + data)
+		except:
+			print("not yet connected")
 	
 	
-	
+
 	
 sm = ScreenManager()
 sm.add_widget(FirstScreen(name="1st"))
 sm.add_widget(SecondScreen(name="2nd"))
 sm.add_widget(ThirdScreen(name="3rd"))
 sm.add_widget(FourthScreen(name="4th"))
+sm.add_widget(FifthScreen(name="5th"))
 				
 class GUI(App):
 	def on_pause(self):

@@ -32,7 +32,7 @@ sock.connect((host, 2))
 print("connected.  Please enter Commands:")
 while True:
     data = input()
-    if len(data) == 0: break
+    #if len(data) == 0: break
     sock.send(data)
 
 sock.close()
