@@ -147,18 +147,59 @@ def server():
 							
 					except:
 						pass
+
+
+			#Clocks			
 						
-			if data == "binClock":
+			if data == ("binClock"):
 				try:
 					if p.poll() == None:
 						print "Can only start one process at a time"
 				except:	
 					try:
 						#starte den subprocess und speichere ihn unter p
-						p = subprocess.Popen(["python", "/home/pi/led/progs10/binaryClock.py"])
+						p = subprocess.Popen(["python", "/home/pi/led/progs10/Clock.py", "binClock"])
 					except:
 						pass	
+			if data == ("digClock"):
+				try:
+					if p.poll() == None:
+						print "Can only start one process at a time"
+				except:	
+					try:
+						#starte den subprocess und speichere ihn unter p
+						p = subprocess.Popen(["python", "/home/pi/led/progs10/Clock.py", "digClock"])
+					except:
+						pass	
+
+			if data == ("analogClock"):
+				try:
+					if p.poll() == None:
+						print "Can only start one process at a time"
+				except:	
+					try:
+						#starte den subprocess und speichere ihn unter p
+						p = subprocess.Popen(["python", "/home/pi/led/progs10/Clock.py", "analogClock"])
+					except:
+						pass	
+
+			if data == ("scrollClock"):
+				try:
+					if p.poll() == None:
+						print "Can only start one process at a time"
+				except:	
+					try:
+						#starte den subprocess und speichere ihn unter p
+						p = subprocess.Popen(["python", "/home/pi/led/progs10/Clock.py", "scrollClock"])
+					except:
+						pass	
+
+
+
+
 			
+
+
 			if data == "black":
 				try:
 					subprocess.Popen(["python", "/home/pi/led/progs10/PiLed.py", "black"])

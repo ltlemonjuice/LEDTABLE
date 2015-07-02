@@ -1,9 +1,11 @@
 #!/usr/bin/env python
+#coding: utf8 
 import time
 import array
 import fcntl
 import random
 import sys
+import os
 import select
 from imgdisp import imgdisp
 
@@ -415,7 +417,8 @@ while True:
 			for i in range(0, 11):
 				file = "/home/pi/led/progs10/img/gameover/%d.png" %(i)
 				imgdisp(file)
-				time.sleep(0.1)
+				time.sleep(0.05)
+			os.system("python /home/pi/led/progs10/scrollText.py %s 0.1 [0,255,0] 1" % len(data.parts) )
 			break
 			
 		move()

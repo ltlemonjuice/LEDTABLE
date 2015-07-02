@@ -31,11 +31,12 @@ Builder.load_string('''
 				root.connect()
 
 		Button:
-			text: "Binary Clock"
+			text: "Clock"
 			on_release:
 				root.send("stop")
 				root.setTime()
-				root.send("binClock")
+				root.manager.current = "6th"
+				root.manager.transition.direction = "down"
 		
 		Button:
 			text: "Scrolling Text"
@@ -316,6 +317,54 @@ Builder.load_string('''
 			root.send("black")
 			root.manager.current = "1st"
 			root.manager.transition.direction = "down"
+
+<SixthScreen>:
+	GridLayout:
+		cols: 1
+		Label:
+			size_hint_y: None
+			height: 20
+			text: "Clock Controls"
+
+		GridLayout:
+			cols: 2
+			rows: 2
+			Button:
+				text: "Binary Clock"
+				on_release:
+					root.send("stop")
+					root.send("binClock")
+			Button:
+				text: "Digital Clock"
+				on_release:
+					root.send("stop")
+					root.send("digClock")
+
+			Button:
+				text: "Analog Clock"
+				on_release:
+					root.send("stop")
+					root.send("analogClock")
+			Button:
+				text: "Scrolling Clock"
+				on_release:
+					root.send("stop")
+					root.send("scrollClock")
+
+			
+
+		GridLayout:
+			cols: 1	
+			size_hint_y: None
+			height: 40
+			Button:
+				background_color: [2,0,0,1]
+				text: 'Quit and Back to Menu'
+				on_press: 
+					root.send("stop")
+					root.send("black")
+					root.manager.current = "1st"
+					root.manager.transition.direction = "up"
 ''')
 
 
@@ -405,10 +454,16 @@ class FifthScreen(Screen):
 		except:
 			print("not yet connected")
 	
+class SixthScreen(Screen):
+	def send(self, data):
+		try:
+			sock.send(data)
+			print("Sent: " + data)
+		except:
+			print("not yet connected")
 	
 	
-	
-	
+
 	
 sm = ScreenManager()
 sm.add_widget(FirstScreen(name="1st"))
@@ -416,6 +471,7 @@ sm.add_widget(SecondScreen(name="2nd"))
 sm.add_widget(ThirdScreen(name="3rd"))
 sm.add_widget(FourthScreen(name="4th"))
 sm.add_widget(FifthScreen(name="5th"))
+sm.add_widget(SixthScreen(name="6th"))
 				
 class GUI(App):
 	def on_pause(self):
