@@ -225,10 +225,10 @@ Builder.load_string('''
 		
 			Button:
 				size_hint_y: None
-				height: 40
+				height: 200
 				text: "Display Text"
 				on_release:
-					root.send(ST.text)
+					root.send("*TEXT*%s" % ST.text)
 
 			GridLayout:
 				size_hint_y: None

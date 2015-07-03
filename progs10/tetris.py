@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-import time
+#coding: utf8 
+import time, threading
 import array
 import fcntl
 import random
@@ -15,33 +16,12 @@ rgb=bytearray(3)
 fcntl.ioctl(spidev, 0x40046b04, array.array('L', [400000]))
 
 #creating 10x10 matrix (last object may not be used)
-matrix = [[[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
-			[[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
-			[[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
-			[[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
-			[[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
-			[[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
-			[[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
-			[[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
-			[[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
-			[[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]]
-			
-cmatrix = [[[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
-			[[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
-			[[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
-			[[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
-			[[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
-			[[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
-			[[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
-			[[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
-			[[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]],
-			[[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]]]
+matrix = [[[0 for x in range(3)] for x in range(10)] for x in range(10)]
+cmatrix = [[[0 for x in range(3)] for x in range(10)] for x in range(10)]
 			
 
 
-			
-
-#Define Functions for Allocation and Display
+#Define global Functions
 def allocate():
 
 	for x in range(0,10):
@@ -278,12 +258,37 @@ def display():
 			spidev.write(rgb)
 								
 	spidev.flush()
-	
 
-class Data:
-	posX = 0
-	posY = 0
-	delay = .25
+def clearMatrix():
+	for x in range(0, 10):
+		for y in range(0, 10):	
+			matrix[x][y][0] = 0
+			matrix[x][y][1] = 0
+			matrix[x][y][2] = 0
+	
+def checkNegPixel(pixelx, pixely):
+	if (pixelx < 0) or (pixely < 0):
+		return False
+	else:
+		return True
+
+def checkPixel(pixel):
+	print "Pixels: " + str(pixel)
+	if (pixel[0] + pixel[1] + pixel[2]) == 0: 
+		return True
+	else:
+		return False
+
+
+#DATA
+posX = 0
+posY = 0
+delay = 1
+global current
+parts = []
+colors = []
+
+
 
 #Figures Classes	
 class Quad:
@@ -326,16 +331,61 @@ class SShape1:
 		self.color = [0,0,255] #Blue
 		self.blocks1 = [[self.x,self.y],[self.x+1,self.y],[self.x+1,self.y+1],[self.x,self.y-1]]
 		self.blocks2 = [[self.x,self.y],[self.x+1,self.y],[self.x,self.y+1],[self.x-1,self.y+1]]
-		
+	
+	
+
+	def checkColl(self, direction, turn):
+		self.blocks1 = [[self.x,self.y],[self.x+1,self.y],[self.x+1,self.y+1],[self.x,self.y-1]]
+		self.blocks2 = [[self.x,self.y],[self.x+1,self.y],[self.x,self.y+1],[self.x-1,self.y+1]]
+	
+		if direction == "down":
+			if turn == 0:
+				print("DOWN 0")
+				if checkPixel(matrix[(self.blocks1[0][0])][(self.blocks1[0][1])+1]) and checkPixel(matrix[(self.blocks1[0][0])+1][(self.blocks1[0][1])+2]):
+					return True
+				else:
+					return False
+			elif turn == 1:
+				if checkPixel(matrix[self.blocks1[0][0]][(self.blocks1[0][1])+2]) and checkPixel(matrix[(self.blocks1[0][0])+1][(self.blocks1[0][1])+1]) and checkPixel(matrix[(self.blocks1[0][0])-1][(self.blocks1[0][1])+2]):
+					return True
+				else:
+					return False
+		elif direction == "left":
+			if turn == 0:
+				if checkPixel(matrix[(self.blocks1[0][0])-1][(self.blocks1[0][1])-1]) and checkPixel(matrix[(self.blocks1[0][0])-1][self.blocks1[0][1]]) and checkPixel(matrix[self.blocks1[0][0]][(self.blocks1[0][1])+1]):
+					return True
+				else:
+					return False
+			elif turn == 1:
+				if checkPixel(matrix[(self.blocks1[0][0])-1][self.blocks1[0][1]]) and checkPixel(matrix[(self.blocks1[0][0])-2][self.blocks1[0][1]]):
+					return True
+				else:
+					return False
+		elif direction == "right":
+			if turn == 0:
+				if checkPixel(matrix[(self.blocks1[0][0])-1][(self.blocks1[0][1])-1]) and checkPixel(matrix[(self.blocks1[0][0])-1][self.blocks1[0][1]]) and checkPixel(matrix[self.blocks1[0][0]][(self.blocks1[0][1])+1]):
+					return True
+				else:
+					return False
+			elif turn == 1:
+				if checkPixel(matrix[(self.blocks1[0][0])-1][self.blocks1[0][1]]) and checkPixel(matrix[(self.blocks1[0][0])-2][self.blocks1[0][1]]):
+					return True
+				else:
+					return False
+		else:
+			pass
 		
 	def turn(self):
 		if self.turnState == 0:
+			#checkColl(1)
 			self.turnState = 1
 			self.delOld(self.blocks1)
 		elif self.turnState == 1:
 			self.turnState = 0
 			self.delOld(self.blocks2)
 		return None
+
+	
 	
 	def delOld(self, blocks):
 		matrix[blocks[0][0]][blocks[0][1]] = [0,0,0] 
@@ -343,16 +393,32 @@ class SShape1:
 		matrix[blocks[2][0]][blocks[2][1]] = [0,0,0]
 		matrix[blocks[3][0]][blocks[3][1]] = [0,0,0]
 	
+	
+
 	def paint(self):
-		if self.x+1 <= 9 and self.y+1 <= 9:
+		if (0 <= self.x+1 <= 9) and (0 <= self.y+1 <= 9):
 			if self.turnState == 0:
 				self.delOld(self.blocks1)
 				self.blocks1 = [[self.x,self.y],[self.x+1,self.y],[self.x+1,self.y+1],[self.x,self.y-1]]
 				
-				matrix[self.blocks1[0][0]][self.blocks1[0][1]] = self.color
-				matrix[self.blocks1[1][0]][self.blocks1[1][1]] = self.color
-				matrix[self.blocks1[2][0]][self.blocks1[2][1]] = self.color
-				matrix[self.blocks1[3][0]][self.blocks1[3][1]] = self.color
+				
+				if checkNegPixel(self.blocks1[0][0],self.blocks1[0][1]):
+					matrix[self.blocks1[0][0]][self.blocks1[0][1]] = self.color
+				if checkNegPixel(self.blocks1[1][0],self.blocks1[1][1]):
+					matrix[self.blocks1[1][0]][self.blocks1[1][1]] = self.color
+				if checkNegPixel(self.blocks1[2][0],self.blocks1[2][1]):
+					matrix[self.blocks1[2][0]][self.blocks1[2][1]] = self.color
+				if checkNegPixel(self.blocks1[3][0],self.blocks1[3][1]):
+					matrix[self.blocks1[3][0]][self.blocks1[3][1]] = self.color
+
+				count = 0
+				for i in range(0,len(matrix)):
+					if checkPixel(matrix[i]):
+						count = count + 1
+
+				print("%d active Pixels" % count)
+
+				
 				
 			elif self.turnState == 1:
 				self.delOld(self.blocks2)
@@ -362,8 +428,10 @@ class SShape1:
 				matrix[self.blocks2[1][0]][self.blocks2[1][1]] = self.color
 				matrix[self.blocks2[2][0]][self.blocks2[2][1]] = self.color
 				matrix[self.blocks2[3][0]][self.blocks2[3][1]] = self.color
+
+
 			
-			display()
+			
 			
 
 class SShape2:
@@ -683,76 +751,99 @@ class EShape:
 			display()
 			
 			
-def clearMatrix():
-	for x in range(0, 10):
-		for y in range(0, 10):	
-			matrix[x][y][0] = 0
-			matrix[x][y][1] = 0
-			matrix[x][y][2] = 0
-				
 
-def checkCol():
+
+def checkRow():
 	return None
 	
 	
-def checkInput(object):
+def checkInput(current):
 	if select.select([sys.stdin], [], [], 0)[0]:
 		input = sys.stdin.readline().strip()
-		if input == "left" and 0 < object.x < 9:
-			object.x = object.x - 1
+		if input == "left" and 0 < current.x < 9:
+			
+			current.x = current.x - 1
 		elif input == "turn": 
-			object.turn()
+			current.turn()
 		elif input == "right":
-			object.x = object.x + 1
+			current.x = current.x + 1
 		elif input == "down":
-			object.y = object.y + 1
+			current.y = current.y + 1
 		else:
 			print "no valid command"
 		
 	else:
 		pass
 	
-def setMatrix():
-	return None
-		
+	
 
-def move(object):
-	object.y = object.y + 1
-	object.paint()
-	time.sleep(Data.delay)
+def move(current):
+	#sched = threading.Timer(1,move).start()
+	if current.checkColl("down", current.turnState):
+		current.y = current.y + 1
+		current.paint()
+		display()
+
+		time.sleep(0.25)
+		return True
+	else:
+		print ("Collided")
+		return False
+
+	
 
 def newBlock():
 	#rand = random.randint(0,6)
-	rand = 5
-	clearMatrix()
+	rand = 1
+	#clearMatrix()
 	
 	if rand == 0:
-		object = Quad(4,0)
+		current = Quad(4,-3)
 	elif rand == 1:
-		object = SShape1(4,0)
+		current = SShape1(4,-3)
 	elif rand == 2:
-		object = SShape2(4,0)
+		current = SShape2(4,-3)
 	elif rand == 3:
-		object = LShape1(4,0)
+		current = LShape1(4,-3)
 	elif rand == 4:
-		object = LShape2(4,0)
+		current = LShape2(4,-3)
 	elif rand == 5:
-		object = Stick(4,0)
+		current = Stick(4,-3)
 	elif rand == 6:
-		object = EShape(4,0)
+		current = EShape(4,-3)
 	
-	object.paint()
-	return object
+	current.paint()
+	return current
 
 	
 #MAIN
-
-while True:
-	object = newBlock()
+#while True:
+print("**Initiated Tetris**")
 	
-	for i in range(0,8):
-		checkInput(object)
-		move(object)
+	#while True:
+clearMatrix()
+current = newBlock()
+matrix[5][7][0] = 255
+
+for i in range(0,1):
+	current = newBlock()
+	checkInput(current)
+	coll = True
+
+	while coll:
+		checkInput(current)
+		coll = move(current)
+
+
+"""
+current = newBlock()
+
+checkInput(current)
+
+for i in range(0,8):
+	checkInput(current)
+	"""
+		
 		
 	
 	

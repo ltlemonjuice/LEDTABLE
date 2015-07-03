@@ -108,6 +108,28 @@ def server():
 					except:
 						pass
 
+
+			if data == "tetris":
+				try:
+					if p.poll() == None:
+						print "Can only start one process at a time"
+				except:
+					try:
+						#starte subprocess mit stdin für data weiterleitung
+						p = subprocess.Popen(["python", "/home/pi/led/progs10/tetris.py"], stdin=subprocess.PIPE)
+						#stuff to communicate
+						while data != "stop":
+							data = client_sock.recv(1024)
+							if len(data) == 0: 
+								break
+							#leite data an subprocess weiter
+							p.stdin.write(data + "\n")
+							p.stdin.flush()
+							
+					except:
+						pass
+
+
 			if data == "scrollText":
 				try:
 					if p.poll() == None:
