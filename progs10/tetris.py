@@ -20,6 +20,16 @@ matrix = [[[0 for x in range(3)] for x in range(10)] for x in range(10)]
 cmatrix = [[[0 for x in range(3)] for x in range(10)] for x in range(10)]
 			
 
+#DATA
+posX = 0
+posY = 0
+delay = 1
+global current
+global sched
+parts = []
+colors = []
+
+
 
 #Define global Functions
 def allocate():
@@ -245,7 +255,7 @@ def allocate():
 				cmatrix[x][y][1] = matrix[col][0][1]
 				cmatrix[x][y][2] = matrix[col][0][2]
 				
-	cmatrix.reverse()
+	cmatrix.reverse()    
 				
 def display():
 	#allocating
@@ -279,14 +289,101 @@ def checkPixel(pixel):
 	else:
 		return False
 
+def newBlock():
+	#rand = random.randint(0,6)
+	rand = 1
+	#clearMatrix()
+	
+	if rand == 0:
+		current = Quad(4,-3)
+	elif rand == 1:
+		current = SShape1(4,-3)
+	elif rand == 2:
+		current = SShape2(4,-3)
+	elif rand == 3:
+		current = LShape1(4,-3)
+	elif rand == 4:
+		current = LShape2(4,-3)
+	elif rand == 5:
+		current = Stick(4,-3)
+	elif rand == 6:
+		current = EShape(4,-3)
+	
+	current.paint()
+	return current
 
-#DATA
-posX = 0
-posY = 0
-delay = 1
-global current
-parts = []
-colors = []
+
+
+def move(current):
+	
+	sched = threading.Timer(1,move).start()
+	if current.checkColl("down", current.turnState):
+		current.delOld()
+		current.y = current.y + 1
+		current.paint()
+		display()
+
+		time.sleep(delay)
+		return True
+	else:
+		print ("Collided DOWN")
+		newBlock()
+		sched
+		return False
+
+
+def right(current):
+	if current.checkColl("right", current.turnState):
+		current.delOld()
+
+		current.x = current.x + 1
+		current.paint()
+		display()
+		return True
+	else:
+		print ("Collided RIGHT")
+		return False
+
+def left(current):
+	if current.checkColl("left", current.turnState):
+		current.delOld()
+		current.x = current.x - 1
+		current.paint()
+		display()
+		return True
+	else:
+		print ("Collided LEFT")
+		return False
+
+def checkRow():
+	return None
+	
+	
+def checkInput(current):
+	if select.select([sys.stdin], [], [], 0)[0]:
+		input = sys.stdin.readline().strip()
+		if input == "left" and 0 < current.x < 9:
+			
+			left(current)
+		elif input == "turn": 
+			current.turn()
+		elif input == "right":
+			right(current)
+		elif input == "down":
+			current.y = current.y + 1
+		else:
+			print "no valid command"
+		
+	else:
+		pass
+	
+	
+
+
+
+
+
+
 
 
 
@@ -378,16 +475,23 @@ class SShape1:
 	def turn(self):
 		if self.turnState == 0:
 			#checkColl(1)
+			self.delOld()
 			self.turnState = 1
-			self.delOld(self.blocks1)
+			
 		elif self.turnState == 1:
+			self.delOld()
 			self.turnState = 0
-			self.delOld(self.blocks2)
+			
 		return None
 
+
 	
-	
-	def delOld(self, blocks):
+	def delOld(self):
+		if self.turnState == 0:
+			blocks = self.blocks1
+		elif self.turnState == 1:
+			blocks = self.blocks2
+
 		matrix[blocks[0][0]][blocks[0][1]] = [0,0,0] 
 		matrix[blocks[1][0]][blocks[1][1]] = [0,0,0]
 		matrix[blocks[2][0]][blocks[2][1]] = [0,0,0]
@@ -398,7 +502,7 @@ class SShape1:
 	def paint(self):
 		if (0 <= self.x+1 <= 9) and (0 <= self.y+1 <= 9):
 			if self.turnState == 0:
-				self.delOld(self.blocks1)
+				self.delOld()
 				self.blocks1 = [[self.x,self.y],[self.x+1,self.y],[self.x+1,self.y+1],[self.x,self.y-1]]
 				
 				
@@ -421,7 +525,7 @@ class SShape1:
 				
 				
 			elif self.turnState == 1:
-				self.delOld(self.blocks2)
+				self.delOld()
 				self.blocks2 = [[self.x,self.y],[self.x+1,self.y],[self.x,self.y+1],[self.x-1,self.y+1]]
 				
 				matrix[self.blocks2[0][0]][self.blocks2[0][1]] = self.color
@@ -753,67 +857,7 @@ class EShape:
 			
 
 
-def checkRow():
-	return None
-	
-	
-def checkInput(current):
-	if select.select([sys.stdin], [], [], 0)[0]:
-		input = sys.stdin.readline().strip()
-		if input == "left" and 0 < current.x < 9:
-			
-			current.x = current.x - 1
-		elif input == "turn": 
-			current.turn()
-		elif input == "right":
-			current.x = current.x + 1
-		elif input == "down":
-			current.y = current.y + 1
-		else:
-			print "no valid command"
-		
-	else:
-		pass
-	
-	
 
-def move(current):
-	#sched = threading.Timer(1,move).start()
-	if current.checkColl("down", current.turnState):
-		current.y = current.y + 1
-		current.paint()
-		display()
-
-		time.sleep(0.25)
-		return True
-	else:
-		print ("Collided")
-		return False
-
-	
-
-def newBlock():
-	#rand = random.randint(0,6)
-	rand = 1
-	#clearMatrix()
-	
-	if rand == 0:
-		current = Quad(4,-3)
-	elif rand == 1:
-		current = SShape1(4,-3)
-	elif rand == 2:
-		current = SShape2(4,-3)
-	elif rand == 3:
-		current = LShape1(4,-3)
-	elif rand == 4:
-		current = LShape2(4,-3)
-	elif rand == 5:
-		current = Stick(4,-3)
-	elif rand == 6:
-		current = EShape(4,-3)
-	
-	current.paint()
-	return current
 
 	
 #MAIN
@@ -825,7 +869,7 @@ clearMatrix()
 current = newBlock()
 matrix[5][7][0] = 255
 
-for i in range(0,1):
+for i in range(0,2):
 	current = newBlock()
 	checkInput(current)
 	coll = True
