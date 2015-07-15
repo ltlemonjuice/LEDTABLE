@@ -2,7 +2,7 @@
 http://imgur.com/a/yVOh2
 
 All relevant files for the LEDTABLE.  
-It is running on a Raspberry Pi with the wheezy Linux Distribution.  
+It is running on a Raspberry Pi with the wheezy Linux Distribution and everything is written in Python.
   
 ####Important stuff to include
 Clock Project: https://github.com/ltlemonjuice/LEDTABLE-Binary-Clock  
