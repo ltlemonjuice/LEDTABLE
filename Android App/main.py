@@ -7,11 +7,12 @@ from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.slider import Slider
 from kivy.graphics import Color, Rectangle
+from kivy.uix.filechooser import FileChooserListView
 from kivy.uix.screenmanager import ScreenManager, Screen
 import time
 from jnius import autoclass
 from kivy.app import App
-import time
+import os
 
 
 #Lade mit dem Builder den kv language String
@@ -412,10 +413,22 @@ Builder.load_string('''
 			size_hint_y: None
 			height: 100
 			text: "Chess Play"
+		TextInput:
+			id: ST
+			size_hint_y: None
+			height: 200
+			multiline: False
+			focus: False
+			text: ""
+
 		Button:
-			text: "Test: e4"
-			on_press:
-				root.send("e4")
+			size_hint_y: None
+			height: 200
+			text: "Make Move"
+			on_release:
+				root.send(ST.text)
+
+
 		GridLayout:
 			cols: 1
 			size_hint_y: None
@@ -435,10 +448,18 @@ Builder.load_string('''
 			size_hint_y: None
 			height: 100
 			text: "Chess PGN"
-		Button:
-			text: "Send String"
-			on_press:
-				root.send("e4 e5 Nf3 Nc6 d3 Nf6 1/2-1/2")
+		FileChooserListView:
+			id: filechooser
+			path: "/sdcard/Download/"
+			
+		GridLayout:
+			cols: 1
+			size_hint_y: None
+			height: 160
+			Button
+				text: "Send"
+				on_press:
+					root.load(filechooser.path, filechooser.selection)
 		GridLayout:
 			cols: 1
 			size_hint_y: None
@@ -570,7 +591,13 @@ class chessMain(Screen):
 			system.out.println("Sent: " + data)
 		except:
 			print("not yet connected")
+			
 class chessPlay(Screen):
+
+	toSend = ""
+	
+	
+	
 	def send(self, data):
 		try:
 			sendStream.write(data)
@@ -578,7 +605,16 @@ class chessPlay(Screen):
 			system.out.println("Sent: " + data)
 		except:
 			print("not yet connected")
+			
+
+			
 class chessPGN(Screen):
+
+	
+	def load(self, path, filename): 
+		f = open(os.path.join(path, filename[0]))
+		self.send(f.read())
+	
 	def send(self, data):
 		try:
 			sendStream.write(data)
