@@ -35,7 +35,7 @@ Builder.load_string('''
 				root.setTime()
 				root.manager.current = "6th"
 				root.manager.transition.direction = "down"
-				
+
 
 		Button:
 			text: "Scrolling Text"
@@ -64,6 +64,13 @@ Builder.load_string('''
 					root.send("snake")
 					root.manager.current = "2nd"
 					root.manager.transition.direction = "left"
+			Button:
+				text: "Chess"
+				on_release:
+					root.send("stop")
+					root.send("chess")
+					root.manager.current = "chessM"
+					root.manager.transition.direction = "down"
 			Button:
 				text: "Tetris"
 				on_release:
@@ -123,13 +130,13 @@ Builder.load_string('''
 					root.send("right")
 
 		GridLayout:
-			cols: 1	
+			cols: 1
 			size_hint_y: None
 			height: 160
 			Button:
 				background_color: [2,0,0,1]
 				text: 'Quit and Back to Menu'
-				on_press: 
+				on_press:
 					root.send("stop")
 					root.send("black")
 					root.manager.current = "1st"
@@ -151,7 +158,7 @@ Builder.load_string('''
 				text: "Set Color"
 				on_release:
 					root.send("[" + str(int(CP.color[0]*255)) + ", " + str(int(CP.color[1]*255)) + ", " + str(int(CP.color[2]*255)) + "]")
-					
+
 
 			Button:
 				background_color: [2,0,0,1]
@@ -159,8 +166,8 @@ Builder.load_string('''
 				on_release:
 					root.send("stop")
 					root.manager.current = "1st"
-					root.manager.transition.direction = "left" 
-					
+					root.manager.transition.direction = "left"
+
 <FourthScreen>:
 	GridLayout:
 		cols: 1
@@ -191,13 +198,13 @@ Builder.load_string('''
 					root.send("right")
 
 		GridLayout:
-			cols: 1	
+			cols: 1
 			size_hint_y: None
 			height: 160
 			Button:
 				background_color: [2,0,0,1]
 				text: 'Quit and Back to Menu'
-				on_press: 
+				on_press:
 					root.send("stop")
 					root.send("black")
 					root.manager.current = "1st"
@@ -207,13 +214,13 @@ Builder.load_string('''
 	AnchorLayout:
 		GridLayout:
 			anchor_x: "center"
-			anchor_y: "top"	
+			anchor_y: "top"
 			cols: 1
 			Label:
 				size_hint_y: None
 				height: 80
 				text: "Scrolling Text Controls"
-			
+
 			TextInput:
 				id: ST
 				size_hint_y: None
@@ -221,7 +228,7 @@ Builder.load_string('''
 				multiline: False
 				focus: False
 				text: ""
-		
+
 			Button:
 				size_hint_y: None
 				height: 200
@@ -244,12 +251,12 @@ Builder.load_string('''
 					on_release:
 						root.send("*SPEED*%s" %SPSL.value)
 
-			
+
 			GridLayout:
 				rows: 2
 				size_hint_y: None
 				height: 700
-				
+
 				GridLayout:
 					cols: 3
 					size_hint_y: None
@@ -262,7 +269,7 @@ Builder.load_string('''
 						text: "Blue"
 
 				GridLayout:
-					cols: 3	
+					cols: 3
 
 					Slider:
 						id: red
@@ -286,7 +293,7 @@ Builder.load_string('''
 						value: 0
 						step: 1
 
-					
+
 
 
 			Button:
@@ -297,21 +304,21 @@ Builder.load_string('''
 					root.send("*COLOR*["+ str(int(red.value)) + "," + str(int(green.value)) + "," + str(int(blue.value))+ "]")
 
 
-			
 
-		
 
-		
 
-	
+
+
+
+
 	Button:
 		size_hint_y: None
 		height: 160
 		anchor_x: "center"
-		anchor_y: "bottom"	
+		anchor_y: "bottom"
 		background_color: [2,0,0,1]
 		text: 'Quit and Back to Menu'
-		on_press: 
+		on_press:
 			root.send("stop")
 			root.send("black")
 			root.manager.current = "1st"
@@ -350,29 +357,109 @@ Builder.load_string('''
 					root.send("stop")
 					root.send("scrollClock")
 
-			
+
 
 		GridLayout:
-			cols: 1	
+			cols: 1
 			size_hint_y: None
 			height: 160
 			Button:
 				background_color: [2,0,0,1]
 				text: 'Quit and Back to Menu'
-				on_press: 
+				on_press:
 					root.send("stop")
 					root.send("black")
 					root.manager.current = "1st"
 					root.manager.transition.direction = "up"
+
+
+<chessMain>:
+	GridLayout:
+		cols: 1
+		Label:
+			size_hint_y: None
+			height: 100
+			text: "Chess Controls"
+		Button:
+			text: "Play Mode"
+			on_press:
+				root.send("play")
+				root.manager.current = "chessP"
+				root.manager.transition.direction = "right"
+		Button:
+			text: "PGN Mode"
+			on_press:
+				root.send("pgn")
+				root.manager.current = "chessp"
+				root.manager.transition.direction = "left"
+		GridLayout:
+			cols: 1
+			size_hint_y: None
+			height: 160
+			Button:
+				background_color: [2,0,0,1]
+				text: 'Quit and Back to Menu'
+				on_press:
+					root.send("stop")
+					root.send("black")
+					root.manager.current = "1st"
+					root.manager.transition.direction = "up"
+
+<chessPlay>:
+	GridLayout:
+		cols: 1
+		Label:
+			size_hint_y: None
+			height: 100
+			text: "Chess Play"
+		Button:
+			text: "Test: e4"
+			on_press:
+				root.send("e4")
+		GridLayout:
+			cols: 1
+			size_hint_y: None
+			height: 160
+			Button:
+				background_color: [2,0,0,1]
+				text: 'Back to Chess Main'
+				on_press:
+					root.send("reset")
+					root.manager.current = "chessM"
+					root.manager.transition.direction = "left"
+
+<chessPGN>:
+	GridLayout:
+		cols: 1
+		Label:
+			size_hint_y: None
+			height: 100
+			text: "Chess PGN"
+		Button:
+			text: "Send String"
+			on_press:
+				root.send("e4 e5 Nf3 Nc6 d3 Nf6 1/2-1/2")
+		GridLayout:
+			cols: 1
+			size_hint_y: None
+			height: 160
+			Button:
+				background_color: [2,0,0,1]
+				text: 'Back to Chess Main'
+				on_press:
+					root.send("reset")
+					root.manager.current = "chessM"
+					root.manager.transition.direction = "right"
+
 
 ''')
 
 
 system = autoclass("java.lang.System")
 
-								
+
 class FirstScreen(Screen):
-	
+
 	checkState = False
 
 	def connect(self):
@@ -401,7 +488,7 @@ class FirstScreen(Screen):
 					except:
 						system.out.println("unsuccessful")
 						self.checkState = False
-					
+
 					break
 		else:
 			if socket.isConnected():
@@ -418,7 +505,7 @@ class FirstScreen(Screen):
 			sendStream.flush()
 		except:
 			system.out.println("not yet connected")
-		
+
 	def send(self, data):
 		try:
 			sendStream.write(data)
@@ -446,7 +533,7 @@ class ThirdScreen(Screen):
 			system.out.println("Sent: " + data)
 		except:
 			system.out.println("not yet connected")
-			
+
 class FourthScreen(Screen):
 	def send(self, data):
 		try:
@@ -455,8 +542,8 @@ class FourthScreen(Screen):
 			system.out.println("Sent: " + data)
 		except:
 			system.out.println("not yet connected")
-	
-	
+
+
 class FifthScreen(Screen):
 	def send(self, data):
 		try:
@@ -474,10 +561,35 @@ class SixthScreen(Screen):
 			system.out.println("Sent: " + data)
 		except:
 			print("not yet connected")
-	
-	
 
-	
+class chessMain(Screen):
+	def send(self, data):
+		try:
+			sendStream.write(data)
+			sendStream.flush()
+			system.out.println("Sent: " + data)
+		except:
+			print("not yet connected")
+class chessPlay(Screen):
+	def send(self, data):
+		try:
+			sendStream.write(data)
+			sendStream.flush()
+			system.out.println("Sent: " + data)
+		except:
+			print("not yet connected")
+class chessPGN(Screen):
+	def send(self, data):
+		try:
+			sendStream.write(data)
+			sendStream.flush()
+			system.out.println("Sent: " + data)
+		except:
+			print("not yet connected")
+
+
+
+
 sm = ScreenManager()
 sm.add_widget(FirstScreen(name="1st"))
 sm.add_widget(SecondScreen(name="2nd"))
@@ -485,7 +597,12 @@ sm.add_widget(ThirdScreen(name="3rd"))
 sm.add_widget(FourthScreen(name="4th"))
 sm.add_widget(FifthScreen(name="5th"))
 sm.add_widget(SixthScreen(name="6th"))
-				
+sm.add_widget(chessMain(name="chessM"))
+sm.add_widget(chessPlay(name="chessP"))
+sm.add_widget(chessPGN(name="chessp"))
+
+
+
 class GUI(App):
 	def on_pause(self):
 		return True
