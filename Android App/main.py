@@ -239,7 +239,7 @@ Builder.load_string('''
 
 			GridLayout:
 				size_hint_y: None
-				height: 200
+				height: 100
 				cols: 2
 				Slider:
 					id: SPSL
@@ -256,7 +256,7 @@ Builder.load_string('''
 			GridLayout:
 				rows: 2
 				size_hint_y: None
-				height: 700
+				height: 400
 
 				GridLayout:
 					cols: 3
@@ -299,7 +299,7 @@ Builder.load_string('''
 
 			Button:
 				size_hint_y: None
-				height: 200
+				height: 100
 				text: "Set Color"
 				on_release:
 					root.send("*COLOR*["+ str(int(red.value)) + "," + str(int(green.value)) + "," + str(int(blue.value))+ "]")
@@ -427,6 +427,7 @@ Builder.load_string('''
 			text: "Make Move"
 			on_release:
 				root.send(ST.text)
+				ST.text=""
 
 
 		GridLayout:
@@ -450,7 +451,7 @@ Builder.load_string('''
 			text: "Chess PGN"
 		FileChooserListView:
 			id: filechooser
-			path: "/sdcard/Download/"
+			path: "/sdcard/Download/pgn/"
 			
 		GridLayout:
 			cols: 1
