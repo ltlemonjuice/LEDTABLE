@@ -416,18 +416,188 @@ Builder.load_string('''
 		TextInput:
 			id: ST
 			size_hint_y: None
-			height: 200
+			height: 50
 			multiline: False
 			focus: False
 			text: ""
 
 		Button:
 			size_hint_y: None
-			height: 200
+			height: 160
+			background_color: [0,1,0,1]
 			text: "Make Move"
 			on_release:
 				root.send(ST.text)
 				ST.text=""
+		GridLayout:
+			rows: 1
+			Button:
+				height: 160
+				text: "R"
+				on_release:
+					ST.text += self.text
+			Button:
+				height: 160
+				text: "N"
+				on_release:
+					ST.text += self.text
+			Button:
+				height: 160
+				text: "B"
+				on_release:
+					ST.text += self.text
+			Button:
+				height: 160
+				text: "Q"
+				on_release:
+					ST.text += self.text
+			Button:
+				height: 160
+				text: "K"
+				on_release:
+					ST.text += self.text
+			Button:
+				height: 160
+				background_color: [1,0,0,1]
+				text: "DEL"
+				on_release:
+					ST.text = ST.text[:-1]
+		GridLayout:
+			rows: 1
+			Button:
+				height: 160
+				text: "a"
+				on_release:
+					ST.text += self.text
+			Button:
+				height: 160
+				text: "b"
+				on_release:
+					ST.text += self.text
+			Button:
+				height: 160
+				text: "c"
+				on_release:
+					ST.text += self.text
+			Button:
+				height: 160
+				text: "d"
+				on_release:
+					ST.text += self.text
+			Button:
+				height: 160
+				text: "e"
+				on_release:
+					ST.text += self.text
+			Button:
+				height: 160
+				text: "f"
+				on_release:
+					ST.text += self.text
+			Button:
+				height: 160
+				text: "g"
+				on_release:
+					ST.text += self.text
+			Button:
+				height: 160
+				text: "h"
+				on_release:
+					ST.text += self.text
+		GridLayout:
+			rows: 1
+			Button:
+				height: 160
+				text: "1"
+				on_release:
+					ST.text += self.text
+			Button:
+				height: 160
+				text: "2"
+				on_release:
+					ST.text += self.text
+			Button:
+				height: 160
+				text: "3"
+				on_release:
+					ST.text += self.text
+			Button:
+				height: 160
+				text: "4"
+				on_release:
+					ST.text += self.text
+			Button:
+				height: 160
+				text: "5"
+				on_release:
+					ST.text += self.text
+			Button:
+				height: 160
+				text: "6"
+				on_release:
+					ST.text += self.text
+			Button:
+				height: 160
+				text: "7"
+				on_release:
+					ST.text += self.text
+			Button:
+				height: 160
+				text: "8"
+				on_release:
+					ST.text += self.text
+		GridLayout:
+			rows: 1
+			Button:
+				height: 160
+				text: "x"
+				on_release:
+					ST.text += self.text
+			Button:
+				height: 160
+				text: "="
+				on_release:
+					ST.text += self.text
+			Button:
+				height: 160
+				text: "O-O"
+				on_release:
+					ST.text += self.text
+			Button:
+				height: 160
+				text: "O-O-O"
+				on_release:
+					ST.text += self.text
+			Button:
+				height: 160
+				text: "+"
+				on_release:
+					ST.text += self.text
+			Button:
+				height: 160
+				text: "#"
+				on_release:
+					ST.text += self.text
+		GridLayout:
+			rows: 1
+			Button:
+				height: 160
+				text: "White Wins"
+				on_release:
+					ST.text += "1-0"
+			Button:
+				height: 160
+				text: "Black Wins"
+				on_release:
+					ST.text += "0-1"
+			Button:
+				height: 160
+				text: "Draw"
+				on_release:
+					ST.text += "1/2-1/2"
+
+
+
 
 
 		GridLayout:
@@ -452,7 +622,7 @@ Builder.load_string('''
 		FileChooserListView:
 			id: filechooser
 			path: "/sdcard/Download/pgn/"
-			
+
 		GridLayout:
 			cols: 1
 			size_hint_y: None
@@ -592,13 +762,13 @@ class chessMain(Screen):
 			system.out.println("Sent: " + data)
 		except:
 			print("not yet connected")
-			
+
 class chessPlay(Screen):
 
 	toSend = ""
-	
-	
-	
+
+
+
 	def send(self, data):
 		try:
 			sendStream.write(data)
@@ -606,16 +776,16 @@ class chessPlay(Screen):
 			system.out.println("Sent: " + data)
 		except:
 			print("not yet connected")
-			
 
-			
+
+
 class chessPGN(Screen):
 
-	
-	def load(self, path, filename): 
+
+	def load(self, path, filename):
 		f = open(os.path.join(path, filename[0]))
 		self.send(f.read())
-	
+
 	def send(self, data):
 		try:
 			sendStream.write(data)
