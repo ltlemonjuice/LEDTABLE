@@ -582,19 +582,9 @@ Builder.load_string('''
 			rows: 1
 			Button:
 				height: 160
-				text: "White Wins"
+				text: "Show Pieces"
 				on_release:
-					ST.text += "1-0"
-			Button:
-				height: 160
-				text: "Black Wins"
-				on_release:
-					ST.text += "0-1"
-			Button:
-				height: 160
-				text: "Draw"
-				on_release:
-					ST.text += "1/2-1/2"
+					root.send("showPieces")
 
 
 
