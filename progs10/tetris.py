@@ -28,7 +28,6 @@ except:
 
 #creating 10x10 matrix (last object may not be used)
 matrix = [[[0 for x in range(3)] for x in range(10)] for x in range(10)]
-#cmatrix = [[[0 for x in range(3)] for x in range(10)] for x in range(10)]
 
 
 #DATA
@@ -44,7 +43,6 @@ colors = []
 #@fold-children
 #Define global Functions
 cmatrix = functions.allocate(matrix)
-
 
 def display():
 	#allocating
@@ -75,89 +73,6 @@ def clearMatrix():
 			matrix[x][y][1] = 0
 			matrix[x][y][2] = 0
 
-def checkNegPixel(pixelx, pixely):
-	if (pixelx < 0) or (pixely < 0):
-		return False
-	else:
-		return True
-
-def checkPixel(pixel):
-	print "Pixels: " + str(pixel)
-	if (pixel[0] + pixel[1] + pixel[2]) == 0:
-		return True
-	else:
-		return False
-
-def newBlock():
-	#rand = random.randint(0,6)
-	rand = 1
-	#clearMatrix()
-
-	if rand == 0:
-		current = Quad(4,-3)
-	elif rand == 1:
-		current = SShape1(4,-3)
-	elif rand == 2:
-		current = SShape2(4,-3)
-	elif rand == 3:
-		current = LShape1(4,-3)
-	elif rand == 4:
-		current = LShape2(4,-3)
-	elif rand == 5:
-		current = Stick(4,-3)
-	elif rand == 6:
-		current = EShape(4,-3)
-
-	current.paint()
-	return current
-
-
-
-def move(current):
-
-	sched = threading.Timer(1,move).start()
-	if current.checkColl("down", current.turnState):
-		current.delOld()
-		current.y = current.y + 1
-		current.paint()
-		display()
-
-		time.sleep(delay)
-		return True
-	else:
-		print ("Collided DOWN")
-		newBlock()
-		sched
-		return False
-
-
-def right(current):
-	if current.checkColl("right", current.turnState):
-		current.delOld()
-
-		current.x = current.x + 1
-		current.paint()
-		display()
-		return True
-	else:
-		print ("Collided RIGHT")
-		return False
-
-def left(current):
-	if current.checkColl("left", current.turnState):
-		current.delOld()
-		current.x = current.x - 1
-		current.paint()
-		display()
-		return True
-	else:
-		print ("Collided LEFT")
-		return False
-
-def checkRow():
-	return None
-
-
 def checkInput(current):
 	try:
 		if select.select([sys.stdin], [], [], 0)[0]:
@@ -179,16 +94,8 @@ def checkInput(current):
 
 
 
-
-
-
-
-
-
-
-
-
-#Figures Classes
+#OLD Piece Classes
+'''
 class Quad:
 	def __init__(self, x, y):
 		self.x = x
@@ -219,7 +126,6 @@ class Quad:
 		else:
 			return None
 		return None
-
 
 class SShape1:
 	def __init__(self, x, y):
@@ -334,11 +240,6 @@ class SShape1:
 				matrix[self.blocks2[2][0]][self.blocks2[2][1]] = self.color
 				matrix[self.blocks2[3][0]][self.blocks2[3][1]] = self.color
 
-
-
-
-
-
 class SShape2:
 	def __init__(self, x, y):
 		self.x = x
@@ -385,7 +286,6 @@ class SShape2:
 				matrix[self.blocks2[3][0]][self.blocks2[3][1]] = self.color
 
 			display()
-
 
 class LShape1:
 	def __init__(self, x, y):
@@ -460,7 +360,6 @@ class LShape1:
 
 			display()
 
-
 class LShape2:
 	def __init__(self, x, y):
 		self.x = x
@@ -534,7 +433,6 @@ class LShape2:
 
 			display()
 
-
 class Stick:
 	def __init__(self, x, y):
 		self.x = x
@@ -580,7 +478,6 @@ class Stick:
 			matrix[self.blocks2[3][0]][self.blocks2[3][1]] = self.color
 
 		display()
-
 
 class EShape:
 	def __init__(self, x, y):
@@ -654,8 +551,9 @@ class EShape:
 				matrix[self.blocks4[3][0]][self.blocks4[3][1]] = self.color
 
 			display()
+'''
 
-
+#Piece Classes
 
 
 
@@ -667,29 +565,8 @@ print("**Initiated Tetris**")
 
 	#while True:
 clearMatrix()
-current = newBlock()
-matrix[5][7][0] = 255
-
-for i in range(0,2):
-	current = newBlock()
-	checkInput(current)
-	coll = True
-
-	while coll:
-	#	checkInput(current)
-		coll = move(current)
-
-
-"""
-current = newBlock()
-
-checkInput(current)
-
-for i in range(0,8):
-	checkInput(current)
-	"""
-
-
+while True:
+	pass
 
 
 

@@ -1,3 +1,13 @@
+'''
+Reads continuosly save.matrix file in current directory and displays the matrix wiht correct RGB values, just like the LEDTABLE itself.
+
+
+save.matrix has to be present!
+
+'''
+
+
+
 import numpy as np
 import time
 import matplotlib.pyplot as plt
