@@ -596,14 +596,15 @@ Builder.load_string('''
 			height: 160
 			Button:
 				background_color: [2,0,0,1]
-				text: 'Back to Chess Main'
+				text: 'Back'
 				on_press:
-					root.send("reset")
-					root.manager.current = "chessM"
+					root.manager.current = "really"
 					root.manager.transition.direction = "left"
 
 <chessPGN>:
+	id: PGN
 	GridLayout:
+		id: g1
 		cols: 1
 		Label:
 			size_hint_y: None
@@ -617,10 +618,12 @@ Builder.load_string('''
 			cols: 1
 			size_hint_y: None
 			height: 160
-			Button
-				text: "Send"
-				on_press:
-					root.load(filechooser.path, filechooser.selection)
+			GridLayout:
+				rows: 1
+				Button:
+					text: "Send"
+					on_press:
+						root.load(filechooser.path, filechooser.selection)
 		GridLayout:
 			cols: 1
 			size_hint_y: None
@@ -632,6 +635,24 @@ Builder.load_string('''
 					root.send("reset")
 					root.manager.current = "chessM"
 					root.manager.transition.direction = "right"
+
+
+<exitCheck>:
+	GridLayout:
+		cols: 1
+		Label:
+			text: "Really wanna cancel game?"
+		GridLayout:
+			rows: 1
+			Button:
+				text: "YES"
+				on_press:
+					root.manager.current = "chessM"
+
+			Button:
+				text: "NO"
+				on_press:
+					root.manager.current = "chessP"
 
 
 ''')
@@ -771,10 +792,15 @@ class chessPlay(Screen):
 
 class chessPGN(Screen):
 
-
 	def load(self, path, filename):
-		f = open(os.path.join(path, filename[0]))
-		self.send(f.read())
+		string=""
+		try:
+			f = open(os.path.join(path, filename[0]), "r")
+			string = f.read().replace("\n", " ")
+			self.send(string)
+		except:
+			pass
+
 
 	def send(self, data):
 		try:
@@ -785,6 +811,14 @@ class chessPGN(Screen):
 			print("not yet connected")
 
 
+class exitCheck(Screen):
+	def send(self, data):
+		try:
+			sendStream.write(data)
+			sendStream.flush()
+			system.out.println("Sent: " + data)
+		except:
+			system.out.println("not yet connected")
 
 
 sm = ScreenManager()
@@ -797,6 +831,7 @@ sm.add_widget(SixthScreen(name="6th"))
 sm.add_widget(chessMain(name="chessM"))
 sm.add_widget(chessPlay(name="chessP"))
 sm.add_widget(chessPGN(name="chessp"))
+sm.add_widget(exitCheck(name="really"))
 
 
 
