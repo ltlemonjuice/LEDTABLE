@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #coding: utf8
-import time, threading
+import time
 import array
 import random
 import sys
@@ -28,25 +28,241 @@ except:
 
 #creating 10x10 matrix (last object may not be used)
 matrix = [[[0 for x in range(3)] for x in range(10)] for x in range(10)]
-
-
-#DATA
-posX = 0
-posY = 0
-delay = 1
-global current
-global sched
-parts = []
-colors = []
+cmatrix = [[[0 for x in range(3)] for x in range(10)] for x in range(10)]
 
 
 #@fold-children
-#Define global Functions
-cmatrix = functions.allocate(matrix)
+def allocate():
+	#gleich wie bei imgdisp.py, wird einfach noch gespiegelt
+	#damit punkt 0/0 am linken oberen rand ist
+
+	for x in range(0,10):
+		for y in range (0,10):
+			cmatrix[x][y][0] = matrix[x][y][0]
+			cmatrix[x][y][1] = matrix[x][y][1]
+			cmatrix[x][y][2] = matrix[x][y][2]
+
+			#Column 1
+			col = 1
+			if x == col and y == 0:
+				cmatrix[x][y][0] = matrix[col][9][0]
+				cmatrix[x][y][1] = matrix[col][9][1]
+				cmatrix[x][y][2] = matrix[col][9][2]
+			elif x == col and y == 1:
+				cmatrix[x][y][0] = matrix[col][8][0]
+				cmatrix[x][y][1] = matrix[col][8][1]
+				cmatrix[x][y][2] = matrix[col][8][2]
+			elif x == col and y == 2:
+				cmatrix[x][y][0] = matrix[col][7][0]
+				cmatrix[x][y][1] = matrix[col][7][1]
+				cmatrix[x][y][2] = matrix[col][7][2]
+			elif x == col and y == 3:
+				cmatrix[x][y][0] = matrix[col][6][0]
+				cmatrix[x][y][1] = matrix[col][6][1]
+				cmatrix[x][y][2] = matrix[col][6][2]
+			elif x == col and y == 4:
+				cmatrix[x][y][0] = matrix[col][5][0]
+				cmatrix[x][y][1] = matrix[col][5][1]
+				cmatrix[x][y][2] = matrix[col][5][2]
+			elif x == col and y == 5:
+				cmatrix[x][y][0] = matrix[col][4][0]
+				cmatrix[x][y][1] = matrix[col][4][1]
+				cmatrix[x][y][2] = matrix[col][4][2]
+			elif x == col and y == 6:
+				cmatrix[x][y][0] = matrix[col][3][0]
+				cmatrix[x][y][1] = matrix[col][3][1]
+				cmatrix[x][y][2] = matrix[col][3][2]
+			elif x == col and y == 7:
+				cmatrix[x][y][0] = matrix[col][2][0]
+				cmatrix[x][y][1] = matrix[col][2][1]
+				cmatrix[x][y][2] = matrix[col][2][2]
+			elif x == col and y == 8:
+				cmatrix[x][y][0] = matrix[col][1][0]
+				cmatrix[x][y][1] = matrix[col][1][1]
+				cmatrix[x][y][2] = matrix[col][1][2]
+			elif x == col and y == 9:
+				cmatrix[x][y][0] = matrix[col][0][0]
+				cmatrix[x][y][1] = matrix[col][0][1]
+				cmatrix[x][y][2] = matrix[col][0][2]
+
+				#Column 3
+			col = 3
+			if x == col and y == 0:
+				cmatrix[x][y][0] = matrix[col][9][0]
+				cmatrix[x][y][1] = matrix[col][9][1]
+				cmatrix[x][y][2] = matrix[col][9][2]
+			elif x == col and y == 1:
+				cmatrix[x][y][0] = matrix[col][8][0]
+				cmatrix[x][y][1] = matrix[col][8][1]
+				cmatrix[x][y][2] = matrix[col][8][2]
+			elif x == col and y == 2:
+				cmatrix[x][y][0] = matrix[col][7][0]
+				cmatrix[x][y][1] = matrix[col][7][1]
+				cmatrix[x][y][2] = matrix[col][7][2]
+			elif x == col and y == 3:
+				cmatrix[x][y][0] = matrix[col][6][0]
+				cmatrix[x][y][1] = matrix[col][6][1]
+				cmatrix[x][y][2] = matrix[col][6][2]
+			elif x == col and y == 4:
+				cmatrix[x][y][0] = matrix[col][5][0]
+				cmatrix[x][y][1] = matrix[col][5][1]
+				cmatrix[x][y][2] = matrix[col][5][2]
+			elif x == col and y == 5:
+				cmatrix[x][y][0] = matrix[col][4][0]
+				cmatrix[x][y][1] = matrix[col][4][1]
+				cmatrix[x][y][2] = matrix[col][4][2]
+			elif x == col and y == 6:
+				cmatrix[x][y][0] = matrix[col][3][0]
+				cmatrix[x][y][1] = matrix[col][3][1]
+				cmatrix[x][y][2] = matrix[col][3][2]
+			elif x == col and y == 7:
+				cmatrix[x][y][0] = matrix[col][2][0]
+				cmatrix[x][y][1] = matrix[col][2][1]
+				cmatrix[x][y][2] = matrix[col][2][2]
+			elif x == col and y == 8:
+				cmatrix[x][y][0] = matrix[col][1][0]
+				cmatrix[x][y][1] = matrix[col][1][1]
+				cmatrix[x][y][2] = matrix[col][1][2]
+			elif x == col and y == 9:
+				cmatrix[x][y][0] = matrix[col][0][0]
+				cmatrix[x][y][1] = matrix[col][0][1]
+				cmatrix[x][y][2] = matrix[col][0][2]
+
+				#Column 5
+			col = 5
+			if x == col and y == 0:
+				cmatrix[x][y][0] = matrix[col][9][0]
+				cmatrix[x][y][1] = matrix[col][9][1]
+				cmatrix[x][y][2] = matrix[col][9][2]
+			elif x == col and y == 1:
+				cmatrix[x][y][0] = matrix[col][8][0]
+				cmatrix[x][y][1] = matrix[col][8][1]
+				cmatrix[x][y][2] = matrix[col][8][2]
+			elif x == col and y == 2:
+				cmatrix[x][y][0] = matrix[col][7][0]
+				cmatrix[x][y][1] = matrix[col][7][1]
+				cmatrix[x][y][2] = matrix[col][7][2]
+			elif x == col and y == 3:
+				cmatrix[x][y][0] = matrix[col][6][0]
+				cmatrix[x][y][1] = matrix[col][6][1]
+				cmatrix[x][y][2] = matrix[col][6][2]
+			elif x == col and y == 4:
+				cmatrix[x][y][0] = matrix[col][5][0]
+				cmatrix[x][y][1] = matrix[col][5][1]
+				cmatrix[x][y][2] = matrix[col][5][2]
+			elif x == col and y == 5:
+				cmatrix[x][y][0] = matrix[col][4][0]
+				cmatrix[x][y][1] = matrix[col][4][1]
+				cmatrix[x][y][2] = matrix[col][4][2]
+			elif x == col and y == 6:
+				cmatrix[x][y][0] = matrix[col][3][0]
+				cmatrix[x][y][1] = matrix[col][3][1]
+				cmatrix[x][y][2] = matrix[col][3][2]
+			elif x == col and y == 7:
+				cmatrix[x][y][0] = matrix[col][2][0]
+				cmatrix[x][y][1] = matrix[col][2][1]
+				cmatrix[x][y][2] = matrix[col][2][2]
+			elif x == col and y == 8:
+				cmatrix[x][y][0] = matrix[col][1][0]
+				cmatrix[x][y][1] = matrix[col][1][1]
+				cmatrix[x][y][2] = matrix[col][1][2]
+			elif x == col and y == 9:
+				cmatrix[x][y][0] = matrix[col][0][0]
+				cmatrix[x][y][1] = matrix[col][0][1]
+				cmatrix[x][y][2] = matrix[col][0][2]
+
+			#Column 7
+			col = 7
+			if x == col and y == 0:
+				cmatrix[x][y][0] = matrix[col][9][0]
+				cmatrix[x][y][1] = matrix[col][9][1]
+				cmatrix[x][y][2] = matrix[col][9][2]
+			elif x == col and y == 1:
+				cmatrix[x][y][0] = matrix[col][8][0]
+				cmatrix[x][y][1] = matrix[col][8][1]
+				cmatrix[x][y][2] = matrix[col][8][2]
+			elif x == col and y == 2:
+				cmatrix[x][y][0] = matrix[col][7][0]
+				cmatrix[x][y][1] = matrix[col][7][1]
+				cmatrix[x][y][2] = matrix[col][7][2]
+			elif x == col and y == 3:
+				cmatrix[x][y][0] = matrix[col][6][0]
+				cmatrix[x][y][1] = matrix[col][6][1]
+				cmatrix[x][y][2] = matrix[col][6][2]
+			elif x == col and y == 4:
+				cmatrix[x][y][0] = matrix[col][5][0]
+				cmatrix[x][y][1] = matrix[col][5][1]
+				cmatrix[x][y][2] = matrix[col][5][2]
+			elif x == col and y == 5:
+				cmatrix[x][y][0] = matrix[col][4][0]
+				cmatrix[x][y][1] = matrix[col][4][1]
+				cmatrix[x][y][2] = matrix[col][4][2]
+			elif x == col and y == 6:
+				cmatrix[x][y][0] = matrix[col][3][0]
+				cmatrix[x][y][1] = matrix[col][3][1]
+				cmatrix[x][y][2] = matrix[col][3][2]
+			elif x == col and y == 7:
+				cmatrix[x][y][0] = matrix[col][2][0]
+				cmatrix[x][y][1] = matrix[col][2][1]
+				cmatrix[x][y][2] = matrix[col][2][2]
+			elif x == col and y == 8:
+				cmatrix[x][y][0] = matrix[col][1][0]
+				cmatrix[x][y][1] = matrix[col][1][1]
+				cmatrix[x][y][2] = matrix[col][1][2]
+			elif x == col and y == 9:
+				cmatrix[x][y][0] = matrix[col][0][0]
+				cmatrix[x][y][1] = matrix[col][0][1]
+				cmatrix[x][y][2] = matrix[col][0][2]
+
+				#Column 9
+			col = 9
+			if x == col and y == 0:
+				cmatrix[x][y][0] = matrix[col][9][0]
+				cmatrix[x][y][1] = matrix[col][9][1]
+				cmatrix[x][y][2] = matrix[col][9][2]
+			elif x == col and y == 1:
+				cmatrix[x][y][0] = matrix[col][8][0]
+				cmatrix[x][y][1] = matrix[col][8][1]
+				cmatrix[x][y][2] = matrix[col][8][2]
+			elif x == col and y == 2:
+				cmatrix[x][y][0] = matrix[col][7][0]
+				cmatrix[x][y][1] = matrix[col][7][1]
+				cmatrix[x][y][2] = matrix[col][7][2]
+			elif x == col and y == 3:
+				cmatrix[x][y][0] = matrix[col][6][0]
+				cmatrix[x][y][1] = matrix[col][6][1]
+				cmatrix[x][y][2] = matrix[col][6][2]
+			elif x == col and y == 4:
+				cmatrix[x][y][0] = matrix[col][5][0]
+				cmatrix[x][y][1] = matrix[col][5][1]
+				cmatrix[x][y][2] = matrix[col][5][2]
+			elif x == col and y == 5:
+				cmatrix[x][y][0] = matrix[col][4][0]
+				cmatrix[x][y][1] = matrix[col][4][1]
+				cmatrix[x][y][2] = matrix[col][4][2]
+			elif x == col and y == 6:
+				cmatrix[x][y][0] = matrix[col][3][0]
+				cmatrix[x][y][1] = matrix[col][3][1]
+				cmatrix[x][y][2] = matrix[col][3][2]
+			elif x == col and y == 7:
+				cmatrix[x][y][0] = matrix[col][2][0]
+				cmatrix[x][y][1] = matrix[col][2][1]
+				cmatrix[x][y][2] = matrix[col][2][2]
+			elif x == col and y == 8:
+				cmatrix[x][y][0] = matrix[col][1][0]
+				cmatrix[x][y][1] = matrix[col][1][1]
+				cmatrix[x][y][2] = matrix[col][1][2]
+			elif x == col and y == 9:
+				cmatrix[x][y][0] = matrix[col][0][0]
+				cmatrix[x][y][1] = matrix[col][0][1]
+				cmatrix[x][y][2] = matrix[col][0][2]
+
+	cmatrix.reverse()
+
 
 def display():
 	#allocating
-	cmatrix = functions.allocate(matrix)
+	allocate()
 	for x in range(0, 10):
 	    for y in range(0, 10):
 	        rgb[0] = cmatrix[x][y][0]
@@ -73,501 +289,409 @@ def clearMatrix():
 			matrix[x][y][1] = 0
 			matrix[x][y][2] = 0
 
-def checkInput(current):
+def setColor(x, y, rgb):
+    matrix[x][y][0] = rgb[0]
+    matrix[x][y][1] = rgb[1]
+    matrix[x][y][2] = rgb[2]
+
+def checkInput():
 	try:
 		if select.select([sys.stdin], [], [], 0)[0]:
 			input = sys.stdin.readline().strip()
+
+		if input == "left":
+			game.current.left()
+		elif input == "turn":
+			game.current.turn()
+		elif input == "right":
+			game.current.right()
+		elif input == "down":
+			game.current.down()
+		elif input == "exit":
+			game.finished = True
+		else:
+			print "no valid command"
 	except:
-		input=raw_input("Input: ")
-
-	if input == "left" and 0 < current.x < 9:
-
-		left(current)
-	elif input == "turn":
-		current.turn()
-	elif input == "right":
-		right(current)
-	elif input == "down":
-		current.y = current.y + 1
-	else:
-		print "no valid command"
+		pass
 
 
 
-#OLD Piece Classes
-'''
-class Quad:
-	def __init__(self, x, y):
-		self.x = x
-		self.y = y
-		self.blocks = [[self.x,self.y],[self.x+1,self.y],[self.x+1,self.y+1],[self.x,self.y+1]]
 
-		self.color = [255,255,0] #Yellow
 
-	def turn(self):
+class game:
+	current = None
+	pieces = []
+	finished = False
+
+	def __init__(self):
+		print("**Initiated Tetris**")
+		self.getNew()
+		self.update()
+
+	def reset(self):
+		clearMatrix()
+		self.current = None
+		self.pieces = []
+		self.finished = False
+		self.__init__()
+
+
+	def getNew(self):
+		a = random.randint(0, 6)
+		if a == 0:
+			Quad()
+		elif a == 1:
+			SShape1()
+		elif a == 2:
+			SShape2()
+		elif a == 3:
+			LShape1()
+		elif a == 4:
+			LShape2()
+		elif a == 5:
+			Stick()
+		elif a == 6:
+			EShape()
+
+
+	def paintPiece(self, piece):
+		for block in piece.blocks:
+			if (0 <= block[0] <= 9) and (0 <= block[1] <= 9):
+				setColor(block[0], block[1], piece.color)
+
+	def getPiece(self, x, y):
+		for piece in self.pieces:
+			for block in piece.blocks:
+			    if block[0] == x and block[1] == y:
+			        return piece
 		return None
 
-	def delOld(self):
-		matrix[self.blocks[0][0]][self.blocks[0][1]] = [0,0,0]
-		matrix[self.blocks[1][0]][self.blocks[1][1]] = [0,0,0]
-		matrix[self.blocks[2][0]][self.blocks[2][1]] = [0,0,0]
-		matrix[self.blocks[3][0]][self.blocks[3][1]] = [0,0,0]
-
-	def paint(self):
-		if self.x+1 <= 9 and self.y+1 <= 9:
-			self.delOld()
-			self.blocks = [[self.x,self.y],[self.x+1,self.y],[self.x+1,self.y+1],[self.x,self.y+1]]
-
-			matrix[self.blocks[0][0]][self.blocks[0][1]] = self.color
-			matrix[self.blocks[1][0]][self.blocks[1][1]] = self.color
-			matrix[self.blocks[2][0]][self.blocks[2][1]] = self.color
-			matrix[self.blocks[3][0]][self.blocks[3][1]] = self.color
-			display()
+	def freeSquare(self, x, y):
+		if self.getPiece(x, y):
+			return False  # Square occupied
 		else:
-			return None
-		return None
+			return True  # Square free!
 
-class SShape1:
-	def __init__(self, x, y):
-		self.x = x
-		self.y = y
-		self.turnState = 0
-		self.color = [0,0,255] #Blue
-		self.blocks1 = [[self.x,self.y],[self.x+1,self.y],[self.x+1,self.y+1],[self.x,self.y-1]]
-		self.blocks2 = [[self.x,self.y],[self.x+1,self.y],[self.x,self.y+1],[self.x-1,self.y+1]]
+	def removePiece(self, piece):
+		self.pieces.remove(piece)
 
+	def addPiece(self, piece):
+		self.pieces.append(piece)
 
-
-	def checkColl(self, direction, turn):
-		self.blocks1 = [[self.x,self.y],[self.x+1,self.y],[self.x+1,self.y+1],[self.x,self.y-1]]
-		self.blocks2 = [[self.x,self.y],[self.x+1,self.y],[self.x,self.y+1],[self.x-1,self.y+1]]
-
-		if direction == "down":
-			if turn == 0:
-				print("DOWN 0")
-				if checkPixel(matrix[(self.blocks1[0][0])][(self.blocks1[0][1])+1]) and checkPixel(matrix[(self.blocks1[0][0])+1][(self.blocks1[0][1])+2]):
-					return True
-				else:
-					return False
-			elif turn == 1:
-				if checkPixel(matrix[self.blocks1[0][0]][(self.blocks1[0][1])+2]) and checkPixel(matrix[(self.blocks1[0][0])+1][(self.blocks1[0][1])+1]) and checkPixel(matrix[(self.blocks1[0][0])-1][(self.blocks1[0][1])+2]):
-					return True
-				else:
-					return False
-		elif direction == "left":
-			if turn == 0:
-				if checkPixel(matrix[(self.blocks1[0][0])-1][(self.blocks1[0][1])-1]) and checkPixel(matrix[(self.blocks1[0][0])-1][self.blocks1[0][1]]) and checkPixel(matrix[self.blocks1[0][0]][(self.blocks1[0][1])+1]):
-					return True
-				else:
-					return False
-			elif turn == 1:
-				if checkPixel(matrix[(self.blocks1[0][0])-1][self.blocks1[0][1]]) and checkPixel(matrix[(self.blocks1[0][0])-2][self.blocks1[0][1]]):
-					return True
-				else:
-					return False
-		elif direction == "right":
-			if turn == 0:
-				if checkPixel(matrix[(self.blocks1[0][0])-1][(self.blocks1[0][1])-1]) and checkPixel(matrix[(self.blocks1[0][0])-1][self.blocks1[0][1]]) and checkPixel(matrix[self.blocks1[0][0]][(self.blocks1[0][1])+1]):
-					return True
-				else:
-					return False
-			elif turn == 1:
-				if checkPixel(matrix[(self.blocks1[0][0])-1][self.blocks1[0][1]]) and checkPixel(matrix[(self.blocks1[0][0])-2][self.blocks1[0][1]]):
-					return True
-				else:
-					return False
-		else:
-			pass
-
-	def turn(self):
-		if self.turnState == 0:
-			#checkColl(1)
-			self.delOld()
-			self.turnState = 1
-
-		elif self.turnState == 1:
-			self.delOld()
-			self.turnState = 0
-
-		return None
+	def checkEnd(self):
+		if not self.current == None:
+			if self.current.collided and self.current.y <= 1:
+				print("GAME OVER!")
+				return True
+			return False
 
 
-
-	def delOld(self):
-		if self.turnState == 0:
-			blocks = self.blocks1
-		elif self.turnState == 1:
-			blocks = self.blocks2
-
-		matrix[blocks[0][0]][blocks[0][1]] = [0,0,0]
-		matrix[blocks[1][0]][blocks[1][1]] = [0,0,0]
-		matrix[blocks[2][0]][blocks[2][1]] = [0,0,0]
-		matrix[blocks[3][0]][blocks[3][1]] = [0,0,0]
-
-
-
-	def paint(self):
-		if (0 <= self.x+1 <= 9) and (0 <= self.y+1 <= 9):
-			if self.turnState == 0:
-				self.delOld()
-				self.blocks1 = [[self.x,self.y],[self.x+1,self.y],[self.x+1,self.y+1],[self.x,self.y-1]]
-
-
-				if checkNegPixel(self.blocks1[0][0],self.blocks1[0][1]):
-					matrix[self.blocks1[0][0]][self.blocks1[0][1]] = self.color
-				if checkNegPixel(self.blocks1[1][0],self.blocks1[1][1]):
-					matrix[self.blocks1[1][0]][self.blocks1[1][1]] = self.color
-				if checkNegPixel(self.blocks1[2][0],self.blocks1[2][1]):
-					matrix[self.blocks1[2][0]][self.blocks1[2][1]] = self.color
-				if checkNegPixel(self.blocks1[3][0],self.blocks1[3][1]):
-					matrix[self.blocks1[3][0]][self.blocks1[3][1]] = self.color
-
-				count = 0
-				for i in range(0,len(matrix)):
-					if checkPixel(matrix[i]):
-						count = count + 1
-
-				print("%d active Pixels" % count)
-
-
-
-			elif self.turnState == 1:
-				self.delOld()
-				self.blocks2 = [[self.x,self.y],[self.x+1,self.y],[self.x,self.y+1],[self.x-1,self.y+1]]
-
-				matrix[self.blocks2[0][0]][self.blocks2[0][1]] = self.color
-				matrix[self.blocks2[1][0]][self.blocks2[1][1]] = self.color
-				matrix[self.blocks2[2][0]][self.blocks2[2][1]] = self.color
-				matrix[self.blocks2[3][0]][self.blocks2[3][1]] = self.color
-
-class SShape2:
-	def __init__(self, x, y):
-		self.x = x
-		self.y = y
-		self.turnState = 0
-		self.color = [0,0,255] #Blue
-		self.blocks1 = [[self.x,self.y],[self.x-1,self.y],[self.x-1,self.y+1],[self.x,self.y-1]]
-		self.blocks2 = [[self.x,self.y],[self.x+1,self.y],[self.x,self.y-1],[self.x-1,self.y-1]]
-
-
-	def turn(self):
-		if self.turnState == 0:
-			self.turnState = 1
-			self.delOld(self.blocks1)
-		elif self.turnState == 1:
-			self.turnState = 0
-			self.delOld(self.blocks2)
-		return None
-
-	def delOld(self, blocks):
-		matrix[blocks[0][0]][blocks[0][1]] = [0,0,0]
-		matrix[blocks[1][0]][blocks[1][1]] = [0,0,0]
-		matrix[blocks[2][0]][blocks[2][1]] = [0,0,0]
-		matrix[blocks[3][0]][blocks[3][1]] = [0,0,0]
-
-	def paint(self):
-		if self.x+1 <= 9 and self.y+1 <= 9:
-			if self.turnState == 0:
-				self.delOld(self.blocks1)
-				self.blocks1 = [[self.x,self.y],[self.x-1,self.y],[self.x-1,self.y+1],[self.x,self.y-1]]
-
-				matrix[self.blocks1[0][0]][self.blocks1[0][1]] = self.color
-				matrix[self.blocks1[1][0]][self.blocks1[1][1]] = self.color
-				matrix[self.blocks1[2][0]][self.blocks1[2][1]] = self.color
-				matrix[self.blocks1[3][0]][self.blocks1[3][1]] = self.color
-
-			elif self.turnState == 1:
-				self.delOld(self.blocks2)
-				self.blocks2 = [[self.x,self.y],[self.x+1,self.y],[self.x,self.y-1],[self.x-1,self.y-1]]
-
-				matrix[self.blocks2[0][0]][self.blocks2[0][1]] = self.color
-				matrix[self.blocks2[1][0]][self.blocks2[1][1]] = self.color
-				matrix[self.blocks2[2][0]][self.blocks2[2][1]] = self.color
-				matrix[self.blocks2[3][0]][self.blocks2[3][1]] = self.color
-
+	def endAnimation(self):
+		red = (255, 0, 0)
+		for i in range(0, 10):
+			for v in range (0, 10):
+				setColor(i, v, red)
 			display()
+			time.sleep(0.01)
 
-class LShape1:
-	def __init__(self, x, y):
-		self.x = x
-		self.y = y
-		self.turnState = 0
-		self.color = [0,255,0] #Green
-		self.blocks1 = [[self.x,self.y],[self.x-1,self.y-1],[self.x,self.y-1],[self.x,self.y+1]]
-		self.blocks2 = [[self.x,self.y],[self.x+1,self.y],[self.x+1,self.y-1],[self.x-1,self.y]]
-		self.blocks3 = [[self.x,self.y],[self.x,self.y-1],[self.x,self.y+1],[self.x+1,self.y+1]]
-		self.blocks4 = [[self.x,self.y],[self.x-1,self.y-1],[self.x-1,self.y],[self.x+1,self.y]]
-
-
-	def turn(self):
-		if self.turnState == 0:
-			self.turnState = 1
-			self.delOld(self.blocks1)
-		elif self.turnState == 1:
-			self.turnState = 2
-			self.delOld(self.blocks2)
-		elif self.turnState == 2:
-			self.turnState = 3
-			self.delOld(self.blocks3)
-		elif self.turnState == 3:
-			self.turnState = 0
-			self.delOld(self.blocks4)
-		return None
-
-	def delOld(self, blocks):
-		matrix[blocks[0][0]][blocks[0][1]] = [0,0,0]
-		matrix[blocks[1][0]][blocks[1][1]] = [0,0,0]
-		matrix[blocks[2][0]][blocks[2][1]] = [0,0,0]
-		matrix[blocks[3][0]][blocks[3][1]] = [0,0,0]
-
-	def paint(self):
-		if self.x+1 <= 9 and self.y+1 <= 9:
-			if self.turnState == 0:
-				self.delOld(self.blocks1)
-				self.blocks1 = [[self.x,self.y],[self.x-1,self.y-1],[self.x,self.y-1],[self.x,self.y+1]]
-
-				matrix[self.blocks1[0][0]][self.blocks1[0][1]] = self.color
-				matrix[self.blocks1[1][0]][self.blocks1[1][1]] = self.color
-				matrix[self.blocks1[2][0]][self.blocks1[2][1]] = self.color
-				matrix[self.blocks1[3][0]][self.blocks1[3][1]] = self.color
-
-			elif self.turnState == 1:
-				self.delOld(self.blocks2)
-				self.blocks2 = [[self.x,self.y],[self.x+1,self.y],[self.x+1,self.y-1],[self.x-1,self.y]]
-
-				matrix[self.blocks2[0][0]][self.blocks2[0][1]] = self.color
-				matrix[self.blocks2[1][0]][self.blocks2[1][1]] = self.color
-				matrix[self.blocks2[2][0]][self.blocks2[2][1]] = self.color
-				matrix[self.blocks2[3][0]][self.blocks2[3][1]] = self.color
-
-			elif self.turnState == 2:
-				self.delOld(self.blocks3)
-				self.blocks3 = [[self.x,self.y],[self.x,self.y-1],[self.x,self.y+1],[self.x+1,self.y+1]]
-
-				matrix[self.blocks3[0][0]][self.blocks3[0][1]] = self.color
-				matrix[self.blocks3[1][0]][self.blocks3[1][1]] = self.color
-				matrix[self.blocks3[2][0]][self.blocks3[2][1]] = self.color
-				matrix[self.blocks3[3][0]][self.blocks3[3][1]] = self.color
-
-			elif self.turnState == 3:
-				self.delOld(self.blocks4)
-				self.blocks4 = [[self.x,self.y],[self.x-1,self.y-1],[self.x-1,self.y],[self.x+1,self.y]]
-
-				matrix[self.blocks4[0][0]][self.blocks4[0][1]] = self.color
-				matrix[self.blocks4[1][0]][self.blocks4[1][1]] = self.color
-				matrix[self.blocks4[2][0]][self.blocks4[2][1]] = self.color
-				matrix[self.blocks4[3][0]][self.blocks4[3][1]] = self.color
-
-			display()
-
-class LShape2:
-	def __init__(self, x, y):
-		self.x = x
-		self.y = y
-		self.turnState = 0
-		self.color = [0,255,0] #Green
-		self.blocks1 = [[self.x,self.y],[self.x+1,self.y-1],[self.x,self.y-1],[self.x,self.y+1]]
-		self.blocks2 = [[self.x,self.y],[self.x+1,self.y],[self.x+1,self.y-1],[self.x-1,self.y]]
-		self.blocks3 = [[self.x,self.y],[self.x,self.y-1],[self.x,self.y+1],[self.x+1,self.y+1]]
-		self.blocks4 = [[self.x,self.y],[self.x-1,self.y-1],[self.x-1,self.y],[self.x+1,self.y]]
-
-
-	def turn(self):
-		if self.turnState == 0:
-			self.turnState = 1
-			self.delOld(self.blocks1)
-		elif self.turnState == 1:
-			self.turnState = 2
-			self.delOld(self.blocks2)
-		elif self.turnState == 2:
-			self.turnState = 3
-			self.delOld(self.blocks3)
-		elif self.turnState == 3:
-			self.turnState = 0
-			self.delOld(self.blocks4)
-		return None
-
-	def delOld(self, blocks):
-		matrix[blocks[0][0]][blocks[0][1]] = [0,0,0]
-		matrix[blocks[1][0]][blocks[1][1]] = [0,0,0]
-		matrix[blocks[2][0]][blocks[2][1]] = [0,0,0]
-		matrix[blocks[3][0]][blocks[3][1]] = [0,0,0]
-
-	def paint(self):
-		if self.x+1 <= 9 and self.y+1 <= 9:
-			if self.turnState == 0:
-				self.delOld(self.blocks1)
-				self.blocks1 = [[self.x,self.y],[self.x+1,self.y-1],[self.x,self.y-1],[self.x,self.y+1]]
-
-				matrix[self.blocks1[0][0]][self.blocks1[0][1]] = self.color
-				matrix[self.blocks1[1][0]][self.blocks1[1][1]] = self.color
-				matrix[self.blocks1[2][0]][self.blocks1[2][1]] = self.color
-				matrix[self.blocks1[3][0]][self.blocks1[3][1]] = self.color
-
-			elif self.turnState == 1:
-				self.delOld(self.blocks2)
-				self.blocks2 = [[self.x,self.y],[self.x+1,self.y],[self.x+1,self.y-1],[self.x-1,self.y]]
-
-				matrix[self.blocks2[0][0]][self.blocks2[0][1]] = self.color
-				matrix[self.blocks2[1][0]][self.blocks2[1][1]] = self.color
-				matrix[self.blocks2[2][0]][self.blocks2[2][1]] = self.color
-				matrix[self.blocks2[3][0]][self.blocks2[3][1]] = self.color
-
-			elif self.turnState == 2:
-				self.delOld(self.blocks3)
-				self.blocks3 = [[self.x,self.y],[self.x,self.y-1],[self.x,self.y+1],[self.x+1,self.y+1]]
-
-				matrix[self.blocks3[0][0]][self.blocks3[0][1]] = self.color
-				matrix[self.blocks3[1][0]][self.blocks3[1][1]] = self.color
-				matrix[self.blocks3[2][0]][self.blocks3[2][1]] = self.color
-				matrix[self.blocks3[3][0]][self.blocks3[3][1]] = self.color
-
-			elif self.turnState == 3:
-				self.delOld(self.blocks4)
-				self.blocks4 = [[self.x,self.y],[self.x-1,self.y-1],[self.x-1,self.y],[self.x+1,self.y]]
-
-				matrix[self.blocks4[0][0]][self.blocks4[0][1]] = self.color
-				matrix[self.blocks4[1][0]][self.blocks4[1][1]] = self.color
-				matrix[self.blocks4[2][0]][self.blocks4[2][1]] = self.color
-				matrix[self.blocks4[3][0]][self.blocks4[3][1]] = self.color
-
-			display()
-
-class Stick:
-	def __init__(self, x, y):
-		self.x = x
-		self.y = y
-		self.turnState = 0
-		self.color = [255,0,0] #Red
-		self.blocks1 = [[self.x,self.y],[self.x,self.y-1],[self.x,self.y+1],[self.x,self.y+2]]
-		self.blocks2 = [[self.x,self.y],[self.x-1,self.y],[self.x+1,self.y],[self.x+2,self.y]]
-
-
-	def turn(self):
-		if self.turnState == 0:
-			self.turnState = 1
-			self.delOld(self.blocks1)
-		elif self.turnState == 1:
-			self.turnState = 0
-			self.delOld(self.blocks2)
-
-
-	def delOld(self, blocks):
-		matrix[blocks[0][0]][blocks[0][1]] = [0,0,0]
-		matrix[blocks[1][0]][blocks[1][1]] = [0,0,0]
-		matrix[blocks[2][0]][blocks[2][1]] = [0,0,0]
-		matrix[blocks[3][0]][blocks[3][1]] = [0,0,0]
-
-	def paint(self):
-		if self.turnState == 0 and (self.x <= 9 and self.y+2 <= 9):
-			self.delOld(self.blocks1)
-			self.blocks1 = [[self.x,self.y],[self.x,self.y-1],[self.x,self.y+1],[self.x,self.y+2]]
-
-			matrix[self.blocks1[0][0]][self.blocks1[0][1]] = self.color
-			matrix[self.blocks1[1][0]][self.blocks1[1][1]] = self.color
-			matrix[self.blocks1[2][0]][self.blocks1[2][1]] = self.color
-			matrix[self.blocks1[3][0]][self.blocks1[3][1]] = self.color
-
-		elif self.turnState == 1 and (1 <= self.x <= 7 and self.y <= 10):
-			self.delOld(self.blocks2)
-			self.blocks2 = [[self.x,self.y],[self.x-1,self.y],[self.x+1,self.y],[self.x+2,self.y]]
-
-			matrix[self.blocks2[0][0]][self.blocks2[0][1]] = self.color
-			matrix[self.blocks2[1][0]][self.blocks2[1][1]] = self.color
-			matrix[self.blocks2[2][0]][self.blocks2[2][1]] = self.color
-			matrix[self.blocks2[3][0]][self.blocks2[3][1]] = self.color
-
+	def removeRow(self, row):
+		white = (255, 255, 255)
+		for i in range(0, 10):
+			setColor(i, row, white)
+			self.getPiece(i, row).remBlock(i, row) #delete all blocks in row from pieces
 		display()
+		time.sleep(0.1)
+		#readjust Board
+		for piece in self.pieces:
+			for block in piece.blocks:
+				if block[1] < row and not piece==self.current:
+					piece.y +=1
+					break
 
-class EShape:
-	def __init__(self, x, y):
-		self.x = x
-		self.y = y
-		self.turnState = 0
-		self.color = [0,255,255] #Cyan
-		self.blocks1 = [[self.x,self.y],[self.x-1,self.y],[self.x,self.y-1],[self.x+1,self.y]]
-		self.blocks2 = [[self.x,self.y],[self.x+1,self.y],[self.x,self.y-1],[self.x,self.y+1]]
-		self.blocks3 = [[self.x,self.y],[self.x,self.y+1],[self.x+1,self.y],[self.x-1,self.y]]
-		self.blocks4 = [[self.x,self.y],[self.x-1,self.y],[self.x,self.y+1],[self.x,self.y-1]]
+
+
+
+	def checkRows(self):
+		count = 0
+
+		for i in range(0, 10):
+			for v in range(9, 1, -1):
+				if not self.getPiece(i, v) == None:
+					count += 1
+					if count == 10:
+						print("Full Row")
+						self.removeRow(i)
+						continue
+				else:
+					count = 0
+
+
+
+	def update(self):
+		if self.checkEnd():
+			self.endAnimation()
+			#self.finished = True
+			time.sleep(1)
+			game.reset()
+		else:
+			clearMatrix()
+			self.checkRows()
+
+			if not self.current == None and self.current.collided:
+				self.getNew()
+
+			if not self.current == self.pieces[-1]:
+				self.current = self.pieces[-1]
+			for piece in self.pieces:
+				self.paintPiece(piece)
+			display()
+
+
+
+
+
+class Shape:
+	color = []
+	turnState = 0
+	maxTurn = 1
+	collided = False
+	x = 4
+	y = 0
+
+
+	def __init__(self):
+		game.pieces.append(self)
+		self.updateBlocks()
+
+	def updateBlocks(self):
+		self.blocks = [x, y]
+
+	def remBlock(self, blocky):
+		for block in self.blocks:
+			if block == blocky:
+				self.blocks.remove(block)
+
+	def checkBounds(self, x, y):
+		if (0 <= x <= 9) and (0 <= y <= 9):
+			print("checkBounds OK")
+			return True
+		return False
+
+	def getDownBlocks(self):
+		blockies= []
+		for block in self.blocks:
+			if not game.getPiece(block[0], block[1]+1) == self:
+				blockies.append(block)
+		return blockies
+
+	def getLeftBlocks(self):
+		blockies= []
+		for block in self.blocks:
+			if not game.getPiece(block[0]-1, block[1]) == self:
+				blockies.append(block)
+		return blockies
+
+	def getRightBlocks(self):
+		blockies= []
+		for block in self.blocks:
+			if not game.getPiece(block[0]+1, block[1]) == self:
+				blockies.append(block)
+		return blockies
+
+	def getTurnBlocks(self):
+		self.turnState += 1
+		self.updateBlocks()
+		blockies = self.blocks
+		self.turnState -= 1
+		self.updateBlocks()
+		return blockies
+
+
+	def checkDown(self):
+		for block in self.getDownBlocks():
+			if not game.freeSquare(block[0], block[1]+1) or not self.checkBounds(block[0], block[1]+1):
+				return False
+		return True
+
+	def checkLeft(self):
+		for block in self.getLeftBlocks():
+			if not game.freeSquare(block[0]-1, block[1]) or not self.checkBounds(block[0]-1, block[1]):
+				return False
+		return True
+
+	def checkRight(self):
+		for block in self.getRightBlocks():
+			if not game.freeSquare(block[0]+1, block[1]) or not self.checkBounds(block[0]+1, block[1]):
+				return False
+		return True
+
+	def checkTurn(self):
+			print self.blocks
+			print self.getTurnBlocks()
+			for block in self.getTurnBlocks():
+				if (not game.getPiece(block[0], block[1]) == self and not game.freeSquare(block[0], block[1])):
+					return False
+				if not self.checkBounds(block[0], block[1]):
+					return False
+			return True
 
 
 	def turn(self):
+		if self.checkTurn():
+			print("checkTurn OK")
+			if self.turnState == self.maxTurn:
+				self.turnState = 0
+			else:
+				self.turnState += 1
+			self.updateBlocks()
+			game.update()
+			return True
+		return False
+
+	def down(self):
+		if self.checkDown():
+			print("checkDown OK")
+			self.y += 1
+			self.updateBlocks()
+			game.update()
+			return True
+		else:
+			self.collided = True
+			game.update()
+			return True
+
+		return False
+
+	def left(self):
+		if self.checkLeft():
+			print("checkLeft OK")
+			self.x -= 1
+			self.updateBlocks()
+			game.update()
+			return True
+		return False
+
+	def right(self):
+		if self.checkRight():
+			print("checkRight OK")
+			self.x += 1
+			self.updateBlocks()
+			game.update()
+			return True
+		return False
+
+
+
+
+class Quad(Shape):
+	color = [255,255,0] #Yellow
+	maxTurn = 0
+
+	def updateBlocks(self):
+		self.blocks = [[self.x,self.y],[self.x+1,self.y],[self.x+1,self.y-1],[self.x,self.y-1]]
+
+	def turn(self):
+		pass #since Quad, turn = no turn
+
+class SShape1(Shape):
+	color = [0,0,255] #Blue
+	maxTurn = 1
+
+	def updateBlocks(self):
 		if self.turnState == 0:
-			self.turnState = 1
-			self.delOld(self.blocks1)
-		elif self.turnState == 1:
-			self.turnState = 2
-			self.delOld(self.blocks2)
-		elif self.turnState == 2:
-			self.turnState = 3
-			self.delOld(self.blocks3)
-		elif self.turnState == 3:
-			self.turnState = 0
-			self.delOld(self.blocks4)
-		return None
+			self.blocks = [[self.x,self.y],[self.x+1,self.y],[self.x+1,self.y+1],[self.x,self.y-1]]
+		if self.turnState == 1:
+			self.blocks = [[self.x,self.y],[self.x+1,self.y],[self.x,self.y+1],[self.x-1,self.y+1]]
 
-	def delOld(self, blocks):
-		matrix[blocks[0][0]][blocks[0][1]] = [0,0,0]
-		matrix[blocks[1][0]][blocks[1][1]] = [0,0,0]
-		matrix[blocks[2][0]][blocks[2][1]] = [0,0,0]
-		matrix[blocks[3][0]][blocks[3][1]] = [0,0,0]
+class SShape2(Shape):
+	color = [0,0,255] #Blue
+	maxTurn = 1
 
-	def paint(self):
-		if self.x+1 <= 9 and self.y+1 <= 9:
-			if self.turnState == 0:
-				self.delOld(self.blocks1)
-				self.blocks1 = [[self.x,self.y],[self.x-1,self.y],[self.x,self.y-1],[self.x+1,self.y]]
+	def updateBlocks(self):
+		if self.turnState == 0:
+			self.blocks = [[self.x,self.y],[self.x-1,self.y],[self.x-1,self.y+1],[self.x,self.y-1]]
+		if self.turnState == 1:
+			self.blocks = [[self.x,self.y],[self.x+1,self.y],[self.x,self.y-1],[self.x-1,self.y-1]]
 
-				matrix[self.blocks1[0][0]][self.blocks1[0][1]] = self.color
-				matrix[self.blocks1[1][0]][self.blocks1[1][1]] = self.color
-				matrix[self.blocks1[2][0]][self.blocks1[2][1]] = self.color
-				matrix[self.blocks1[3][0]][self.blocks1[3][1]] = self.color
+class LShape1(Shape):
+	color = [0,255,0] #Green
+	maxTurn = 3
 
-			elif self.turnState == 1:
-				self.delOld(self.blocks2)
-				self.blocks2 = [[self.x,self.y],[self.x+1,self.y],[self.x,self.y-1],[self.x,self.y+1]]
+	def updateBlocks(self):
+		if self.turnState == 0:
+			self.blocks = [[self.x,self.y],[self.x-1,self.y-1],[self.x,self.y-1],[self.x,self.y+1]]
+		if self.turnState == 1:
+			self.blocks = [[self.x,self.y],[self.x+1,self.y],[self.x+1,self.y-1],[self.x-1,self.y]]
+		if self.turnState == 2:
+			self.blocks = [[self.x,self.y],[self.x,self.y-1],[self.x,self.y+1],[self.x+1,self.y+1]]
+		if self.turnState == 3:
+			self.blocks = [[self.x,self.y],[self.x-1,self.y+1],[self.x-1,self.y],[self.x+1,self.y]]
 
-				matrix[self.blocks2[0][0]][self.blocks2[0][1]] = self.color
-				matrix[self.blocks2[1][0]][self.blocks2[1][1]] = self.color
-				matrix[self.blocks2[2][0]][self.blocks2[2][1]] = self.color
-				matrix[self.blocks2[3][0]][self.blocks2[3][1]] = self.color
+class LShape2(Shape):
+	color = [0,255,0] #Green
+	maxTurn = 3
 
-			elif self.turnState == 2:
-				self.delOld(self.blocks3)
-				self.blocks3 = [[self.x,self.y],[self.x,self.y+1],[self.x+1,self.y],[self.x-1,self.y]]
+	def updateBlocks(self):
+		if self.turnState == 0:
+			self.blocks = [[self.x,self.y],[self.x+1,self.y-1],[self.x,self.y-1],[self.x,self.y+1]]
+		if self.turnState == 1:
+			self.blocks = [[self.x,self.y],[self.x+1,self.y],[self.x+1,self.y+1],[self.x-1,self.y]]
+		if self.turnState == 2:
+			self.blocks = [[self.x,self.y],[self.x,self.y-1],[self.x,self.y+1],[self.x-1,self.y+1]]
+		if self.turnState == 3:
+			self.blocks = [[self.x,self.y],[self.x-1,self.y-1],[self.x-1,self.y],[self.x+1,self.y]]
 
-				matrix[self.blocks3[0][0]][self.blocks3[0][1]] = self.color
-				matrix[self.blocks3[1][0]][self.blocks3[1][1]] = self.color
-				matrix[self.blocks3[2][0]][self.blocks3[2][1]] = self.color
-				matrix[self.blocks3[3][0]][self.blocks3[3][1]] = self.color
+class Stick(Shape):
+	color = [255,0,0] #Red
+	maxTurn = 1
 
-			elif self.turnState == 3:
-				self.delOld(self.blocks4)
-				self.blocks4 = [[self.x,self.y],[self.x-1,self.y],[self.x,self.y+1],[self.x,self.y-1]]
+	def updateBlocks(self):
+		if self.turnState == 0:
+			self.blocks = [[self.x,self.y],[self.x,self.y-1],[self.x,self.y+1],[self.x,self.y+2]]
+		if self.turnState == 1:
+			self.blocks = [[self.x,self.y],[self.x-1,self.y],[self.x+1,self.y],[self.x+2,self.y]]
 
-				matrix[self.blocks4[0][0]][self.blocks4[0][1]] = self.color
-				matrix[self.blocks4[1][0]][self.blocks4[1][1]] = self.color
-				matrix[self.blocks4[2][0]][self.blocks4[2][1]] = self.color
-				matrix[self.blocks4[3][0]][self.blocks4[3][1]] = self.color
+class EShape(Shape):
+	color = [0,255,255] #Cyan
+	maxTurn = 3
 
-			display()
-'''
+	def updateBlocks(self):
+		if self.turnState == 0:
+			self.blocks = [[self.x,self.y],[self.x-1,self.y],[self.x,self.y-1],[self.x+1,self.y]]
+		if self.turnState == 1:
+			self.blocks = [[self.x,self.y],[self.x+1,self.y],[self.x,self.y-1],[self.x,self.y+1]]
+		if self.turnState == 2:
+			self.blocks = [[self.x,self.y],[self.x,self.y+1],[self.x+1,self.y],[self.x-1,self.y]]
+		if self.turnState == 3:
+			self.blocks = [[self.x,self.y],[self.x-1,self.y],[self.x,self.y+1],[self.x,self.y-1]]
 
-#Piece Classes
+
 
 
 
 
 
 #MAIN
-#while True:
-print("**Initiated Tetris**")
-
-	#while True:
 clearMatrix()
-while True:
-	pass
+game = game()
 
+
+#game.endAnimation()
+
+
+#Startpoint
+while not game.finished:
+	checkInput()
+	'''time.sleep(1)
+	game.current.down()
+	time.sleep(1)
+	game.current.left()
+	time.sleep(1)
+	game.current.down()
+	time.sleep(1)
+	game.current.right()
+	time.sleep(1)
+	game.current.turn()'''
 
 
 #@!fold-children

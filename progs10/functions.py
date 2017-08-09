@@ -1,6 +1,5 @@
 
-def allocate(matrix):
-    cmatrix = [[[0 for x in range(3)] for x in range(10)] for x in range(10)]
+def allocate(matrix, cmatrix):
     for x in range(0,10):
         for y in range (0,10):
             cmatrix[x][y][0] = matrix[x][y][0]
