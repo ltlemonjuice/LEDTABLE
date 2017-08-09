@@ -7,6 +7,7 @@ import sys
 import select
 import numpy
 import functions
+import threading
 
 try:
 	from imgdisp import imgdisp
@@ -308,12 +309,11 @@ def checkInput():
 		elif input == "down":
 			game.current.down()
 		elif input == "exit":
-			game.finished = True
+			pass
 		else:
 			print "no valid command"
 	except:
 		pass
-
 
 
 
@@ -325,16 +325,22 @@ class game:
 
 	def __init__(self):
 		print("**Initiated Tetris**")
-		self.getNew()
+		self.current = self.getNew()
 		self.update()
+
 
 	def reset(self):
 		clearMatrix()
-		self.current = None
-		self.pieces = []
 		self.finished = False
-		self.__init__()
+		self.pieces = []
+		self.current = self.getNew()
+		self.update()
 
+	def cleanPieces(self):
+		for piece in self.pieces:
+			if piece.blocks==[]:
+				self.removePiece(piece)
+				print("piece cleaned")
 
 	def getNew(self):
 		a = random.randint(0, 6)
@@ -352,7 +358,6 @@ class game:
 			Stick()
 		elif a == 6:
 			EShape()
-
 
 	def paintPiece(self, piece):
 		for block in piece.blocks:
@@ -385,47 +390,43 @@ class game:
 				return True
 			return False
 
-
 	def endAnimation(self):
 		red = (255, 0, 0)
 		for i in range(0, 10):
 			for v in range (0, 10):
 				setColor(i, v, red)
 			display()
-			time.sleep(0.01)
+			time.sleep(0.0001)
 
 	def removeRow(self, row):
 		white = (255, 255, 255)
 		for i in range(0, 10):
 			setColor(i, row, white)
-			self.getPiece(i, row).remBlock(i, row) #delete all blocks in row from pieces
+			piece = self.getPiece(i, row)
+			piece.remBlock(i, row) #delete all blocks in row from pieces
 		display()
-		time.sleep(0.1)
 		#readjust Board
 		for piece in self.pieces:
 			for block in piece.blocks:
 				if block[1] < row and not piece==self.current:
-					piece.y +=1
-					break
-
-
+					block[1] +=1
 
 
 	def checkRows(self):
 		count = 0
 
-		for i in range(0, 10):
-			for v in range(9, 1, -1):
-				if not self.getPiece(i, v) == None:
-					count += 1
-					if count == 10:
-						print("Full Row")
-						self.removeRow(i)
-						continue
-				else:
+		for v in range(1, 10):
+			for i in range(0, 10):
+				if self.getPiece(i, v) == None:
 					count = 0
+					break
+				else:
+					count += 1
 
-
+				if count == 10:
+					print("Full Row")
+					self.removeRow(v)
+					count = 0
 
 	def update(self):
 		if self.checkEnd():
@@ -434,14 +435,18 @@ class game:
 			time.sleep(1)
 			game.reset()
 		else:
-			clearMatrix()
-			self.checkRows()
+
 
 			if not self.current == None and self.current.collided:
 				self.getNew()
 
 			if not self.current == self.pieces[-1]:
 				self.current = self.pieces[-1]
+				self.checkRows()
+				self.cleanPieces()
+
+			clearMatrix()
+
 			for piece in self.pieces:
 				self.paintPiece(piece)
 			display()
@@ -457,23 +462,26 @@ class Shape:
 	collided = False
 	x = 4
 	y = 0
+	timer = None
 
 
 	def __init__(self):
 		game.pieces.append(self)
 		self.updateBlocks()
 
+
+
+
 	def updateBlocks(self):
 		self.blocks = [x, y]
 
-	def remBlock(self, blocky):
+	def remBlock(self, x, y):
 		for block in self.blocks:
-			if block == blocky:
+			if block[0] == x and block[1] == y:
 				self.blocks.remove(block)
 
 	def checkBounds(self, x, y):
 		if (0 <= x <= 9) and (0 <= y <= 9):
-			print("checkBounds OK")
 			return True
 		return False
 
@@ -526,8 +534,6 @@ class Shape:
 		return True
 
 	def checkTurn(self):
-			print self.blocks
-			print self.getTurnBlocks()
 			for block in self.getTurnBlocks():
 				if (not game.getPiece(block[0], block[1]) == self and not game.freeSquare(block[0], block[1])):
 					return False
@@ -538,7 +544,6 @@ class Shape:
 
 	def turn(self):
 		if self.checkTurn():
-			print("checkTurn OK")
 			if self.turnState == self.maxTurn:
 				self.turnState = 0
 			else:
@@ -550,7 +555,6 @@ class Shape:
 
 	def down(self):
 		if self.checkDown():
-			print("checkDown OK")
 			self.y += 1
 			self.updateBlocks()
 			game.update()
@@ -564,7 +568,6 @@ class Shape:
 
 	def left(self):
 		if self.checkLeft():
-			print("checkLeft OK")
 			self.x -= 1
 			self.updateBlocks()
 			game.update()
@@ -573,7 +576,6 @@ class Shape:
 
 	def right(self):
 		if self.checkRight():
-			print("checkRight OK")
 			self.x += 1
 			self.updateBlocks()
 			game.update()
@@ -675,13 +677,20 @@ class EShape(Shape):
 clearMatrix()
 game = game()
 
-
 #game.endAnimation()
+def timer():
+	try:
+		game.current.down()
+		threading.Timer(0.5, timer).start()
+	except:
+		pass
 
-
+timer()
 #Startpoint
-while not game.finished:
+while not checkInput == "exit":
 	checkInput()
+
+
 	'''time.sleep(1)
 	game.current.down()
 	time.sleep(1)
