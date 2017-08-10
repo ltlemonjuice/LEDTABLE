@@ -278,9 +278,9 @@ def display():
 	try:
 	    spidev.flush()
 	except:
-        f = open("save.matrix", "r")
-        if not f.read()==numpy.array2string(numpy.flipud(numpy.rot90(matrix)), separator=", "):
-            f = open("save.matrix", "w+")
+		f = open("save.matrix", "r")
+		if not f.read()==numpy.array2string(numpy.flipud(numpy.rot90(matrix)), separator=", "):
+			f = open("save.matrix", "w+")
 			f.write(numpy.array2string(numpy.flipud(numpy.rot90(matrix)), separator=", "))
 
 
