@@ -8,42 +8,33 @@ import select
 import numpy
 import functions
 import threading
+import fcntl
 
-try:
-	from imgdisp import imgdisp
-	import fcntl
-except:
-	pass
-
+# Open SPI device
+spidev = file("/dev/spidev0.0", "wb")
+#byte array to store rgb values
 rgb=bytearray(3)
+#setting spi frequency to 400kbps
+fcntl.ioctl(spidev, 0x40046b04, array.array('L', [400000]))
 
-try:
-	# Open SPI device
-	spidev = file("/dev/spidev0.0", "wb")
-	#byte array to store rgb values
-
-	#setting spi frequency to 400kbps
-	fcntl.ioctl(spidev, 0x40046b04, array.array('L', [400000]))
-except:
-	pass
-
-#creating 10x10 matrix (last object may not be used)
+#creating 10x10 matrix
 matrix = [[[0 for x in range(3)] for x in range(10)] for x in range(10)]
 cmatrix = [[[0 for x in range(3)] for x in range(10)] for x in range(10)]
 
 
-#@fold-children
+#Define Functions for Allocation and Display
 def allocate():
 	#gleich wie bei imgdisp.py, wird einfach noch gespiegelt
 	#damit punkt 0/0 am linken oberen rand ist
-
-	for x in range(0,10):
-		for y in range (0,10):
+	for x in range(0, 10):
+		for y in range(0, 10):
 			cmatrix[x][y][0] = matrix[x][y][0]
 			cmatrix[x][y][1] = matrix[x][y][1]
 			cmatrix[x][y][2] = matrix[x][y][2]
 
-			#Column 1
+	#Column 1
+	for x in range(1, 10, 2):
+		for y in range(0, 10):
 			col = 1
 			if x == col and y == 0:
 				cmatrix[x][y][0] = matrix[col][9][0]
@@ -260,28 +251,19 @@ def allocate():
 
 	cmatrix.reverse()
 
-
 def display():
 	#allocating
 	allocate()
+	print(cmatrix)
 	for x in range(0, 10):
-	    for y in range(0, 10):
-	        rgb[0] = cmatrix[x][y][0]
-	        rgb[1] = cmatrix[x][y][1]
-	        rgb[2] = cmatrix[x][y][2]
-	        try:
-	            spidev.write(rgb)
-	        except:
-	            pass
+		for y in range(0, 10):
+			rgb[0] = cmatrix[x][y][0]
+			rgb[1] = cmatrix[x][y][1]
+			rgb[2] = cmatrix[x][y][2]
+			spidev.write(rgb)
 
+	spidev.flush()
 
-	try:
-	    spidev.flush()
-	except:
-		f = open("save.matrix", "r")
-		if not f.read()==numpy.array2string(numpy.flipud(numpy.rot90(matrix)), separator=", "):
-			f = open("save.matrix", "w+")
-			f.write(numpy.array2string(numpy.flipud(numpy.rot90(matrix)), separator=", "))
 
 
 def clearMatrix():
@@ -291,10 +273,10 @@ def clearMatrix():
 			matrix[x][y][1] = 0
 			matrix[x][y][2] = 0
 
-def setColor(x, y, rgb):
-    matrix[x][y][0] = rgb[0]
-    matrix[x][y][1] = rgb[1]
-    matrix[x][y][2] = rgb[2]
+def setColor(x, y, color):
+    matrix[x][y][0] = color[0]
+    matrix[x][y][1] = color[1]
+    matrix[x][y][2] = color[2]
 
 def checkInput():
 	try:
@@ -684,24 +666,12 @@ def timer():
 		game.current.down()
 		threading.Timer(0.5, timer).start()
 	except:
-		pass
+		threading.Timer(0.5, timer).start()
 
 timer()
 #Startpoint
 while not checkInput == "exit":
 	checkInput()
-
-
-	'''time.sleep(1)
-	game.current.down()
-	time.sleep(1)
-	game.current.left()
-	time.sleep(1)
-	game.current.down()
-	time.sleep(1)
-	game.current.right()
-	time.sleep(1)
-	game.current.turn()'''
 
 
 #@!fold-children
