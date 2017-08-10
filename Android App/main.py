@@ -108,6 +108,18 @@ Builder.load_string('''
 			size_hint_y: None
 			height: 80
 			text: "Snake Controls"
+		GridLayout:
+			cols: 1
+			size_hint_y: None
+			height: 100
+			Button:
+				background_color: [2,0,0,1]
+				text: 'Quit and Back to Menu'
+				on_press:
+					root.send("stop")
+					root.send("black")
+					root.manager.current = "1st"
+					root.manager.transition.direction = "right"
 
 		Button:
 			text: "Up"
@@ -130,18 +142,7 @@ Builder.load_string('''
 				on_release:
 					root.send("right")
 
-		GridLayout:
-			cols: 1
-			size_hint_y: None
-			height: 160
-			Button:
-				background_color: [2,0,0,1]
-				text: 'Quit and Back to Menu'
-				on_press:
-					root.send("stop")
-					root.send("black")
-					root.manager.current = "1st"
-					root.manager.transition.direction = "right"
+
 
 <ThirdScreen>:
 	GridLayout:
@@ -176,7 +177,18 @@ Builder.load_string('''
 			size_hint_y: None
 			height: 80
 			text: "Tetris Controls"
-
+		GridLayout:
+			cols: 1
+			size_hint_y: None
+			height: 100
+			Button:
+				background_color: [2,0,0,1]
+				text: 'Quit and Back to Menu'
+				on_press:
+					root.send("stop")
+					root.send("black")
+					root.manager.current = "1st"
+					root.manager.transition.direction = "right"
 		Button:
 			text: "Turn"
 			on_release:
@@ -198,18 +210,7 @@ Builder.load_string('''
 				on_release:
 					root.send("right")
 
-		GridLayout:
-			cols: 1
-			size_hint_y: None
-			height: 160
-			Button:
-				background_color: [2,0,0,1]
-				text: 'Quit and Back to Menu'
-				on_press:
-					root.send("stop")
-					root.send("black")
-					root.manager.current = "1st"
-					root.manager.transition.direction = "right"
+
 
 <FifthScreen>:
 	AnchorLayout:
