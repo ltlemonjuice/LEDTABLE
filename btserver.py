@@ -44,7 +44,7 @@ def server():
 
 #try damit falls die Verbindung einbricht die exception aufgerufen wird. Siehe unten
 	try:
-		while True:
+		while client_sock.getpeername():
 			#setze empfangene Strings auf data
 			data = client_sock.recv(1024)
 			#Falls nichts gesendet wurde, bzw. nur enter gedrückt wurde,
@@ -277,12 +277,12 @@ def server():
 		except:
 			pass
 
-		#sad smiley face
-		imgdisp("/home/pi/led/progs10/smiley-sad.png")
-		time.sleep(1)
-		imgdisp("/home/pi/led/progs10/black.png")
 		pass
 
+	#sad smiley face
+	imgdisp("/home/pi/led/progs10/smiley-sad.png")
+	time.sleep(1)
+	imgdisp("/home/pi/led/progs10/black.png")
 	print("disconnected")
 
 	#schliesse client und server socket
